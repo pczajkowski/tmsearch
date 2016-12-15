@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Search results for "{{.SearchPhrase}}"</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+    <body>
+        <a href="/">Search again</a>
+        {{range .Results}}
+            <h1>Results from {{.TMName}} ({{len .Segments}} results)</h1>
+            <table>
+                <tr style='text-align: left'>
+                    <th>No.</th>
+                    <th>Source</th>
+                    <th>Translation</th>
+                </tr>
+                {{range $i, $segment := .Segments}}
+                    <tr style='text-align: left'>
+                        <td>{{add $i 1}}</td>
+                        <td>{{$segment.Source}}</td>
+                        <td>{{$segment.Target}}</td>
+                    </tr>
+                {{end}}
+            </table>
+            <br/>
+            <a href="/">Search again</a>
+        {{end}}
+    </body>
+</html>

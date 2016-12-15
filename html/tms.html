@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Our TMs</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+    <body>
+        <a href="/">Go back to start</a>
+        <h1>We have {{len .TMs}} TMs</h1>
+            <table>
+                <tr style='text-align: left'>
+                    <th>Name</th>
+                    <th>Source language</th>
+                    <th>Target language</th>
+                    <th>No. of segments</th>
+                </tr>
+                {{range .TMs}}
+                    <tr style='text-align: left'>
+                        <td><b>{{.FriendlyName}}</b></td>
+                        <td>{{.SourceLangCode}}</td>
+                        <td>{{.TargetLangCode}}</td>
+                        <td>{{.NumEntries}}</td>
+                    </tr>
+                {{end}}
+            </table>
+            <br/>
+            <a href="/">Go back to start</a>
+    </body>
+</html>

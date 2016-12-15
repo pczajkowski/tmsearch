@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+    <head>
+        <title>memoQ TM Search</title>
+    </head>
+    <body>
+        <form action="/q">
+            <p>Text:</p>
+            <input type="text" name="phrase">
+            <p>Language:</p>
+            <select name="lang">
+                <option value="">All</option>
+                {{range $key, $value := .}}
+                <option value="{{$key}}">{{$value}}</option>
+                {{end}}
+            </select>
+            <input type="submit" value="Search">
+        </form>
+    </body>
+</html>
