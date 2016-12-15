@@ -1,4 +1,4 @@
-# TM Seach for memoQ Server
+# TM Search for memoQ Server
 
 This is a proof-of-concept tool (hobby project) which utilizes [memoQ server Resources API](https://www.memoq.com/en/the-memoq-apis/memoq-server-resources-api).
 
