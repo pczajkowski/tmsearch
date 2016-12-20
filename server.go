@@ -31,7 +31,7 @@ func DisplaySearchResults(w http.ResponseWriter, r *http.Request) {
 	if searchPhrase != "" {
 		var searchResults SearchResults
 		if language == "" || app.CheckLanguage(language) {
-			searchResults = Search(GetTMs(language), searchPhrase)
+			searchResults = app.Search(app.GetTMs(language), searchPhrase)
 			Logger(r, searchResults.TotalResults)
 		} else {
 			errorPage.Execute(w, "Language not valid!")
@@ -53,18 +53,18 @@ func DisplaySearchResults(w http.ResponseWriter, r *http.Request) {
 func DisplayTMs(w http.ResponseWriter, r *http.Request) {
 	language := r.URL.Query().Get("lang")
 
-	var list TMList
+	var TMList []TM
 	if language == "" || app.CheckLanguage(language) {
-		list = GetTMs(language)
-		Logger(r, len(list.TMs))
+		TMList = app.GetTMs(language)
+		Logger(r, len(TMList))
 	} else {
 		errorPage.Execute(w, "Language not valid!")
 		return
 	}
 
-	if len(list.TMs) > 0 {
+	if len(TMList) > 0 {
 		t := template.Must(template.New("tms.html").ParseFiles("./html/tms.html"))
-		t.Execute(w, list)
+		t.Execute(w, TMList)
 	} else {
 		errorPage.Execute(w, "No TMs to display!")
 	}
@@ -72,7 +72,7 @@ func DisplayTMs(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	flag.Parse()
-	app.BaseURL = *url
+	app.SetBaseURL(*url)
 	if app.BaseURL == "" {
 		log.Panicln("Can't do anything without URL to API")
 	}

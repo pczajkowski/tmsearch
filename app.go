@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -15,6 +16,13 @@ type Application struct {
 	Name, AccessToken, Sid, BaseURL, AuthString string
 	Languages                                   map[string]string
 	Delay                                       time.Duration
+}
+
+func (app *Application) SetBaseURL(url string) {
+	if !strings.HasSuffix(url, "/") {
+		url += "/"
+	}
+	app.BaseURL = url
 }
 
 func JsonDecoder(data io.ReadCloser, target interface{}) {

@@ -1,0 +1,37 @@
+{
+    "ConcResult": [
+        {
+            "ConcordanceTextRanges": [
+                {
+                    "Length": 9,
+                    "Start": 0
+                }
+            ],
+            "ConcordanceTranslationRanges": [],
+            "Length": 9,
+            "StartPos": 0,
+            "TMEntry": {
+                "SourceSegment": "<seg><bpt i='1' type='bold'>{}</bpt>Something Test/ Whatever<ept i='1'>{}</ept></seg>",
+                "TargetSegment": "<seg><bpt i='1' type='bold'>{}</bpt>Whatever Test/Something<ept i='1'>{}</ept></seg>"
+            }
+        },
+        {
+            "ConcordanceTextRanges": [
+                {
+                    "Length": 9,
+                    "Start": 0
+                }
+            ],
+            "ConcordanceTranslationRanges": [],
+            "Length": 9,
+            "StartPos": 0,
+            "TMEntry": {
+                "SourceSegment": "<seg><bpt i='1' type='bold'>{}</bpt>Another Test/ Anything<ept i='1'>{}</ept></seg>",
+                "TargetSegment": "<seg><bpt i='1' type='bold'>{}</bpt>Anything Test/Another<ept i='1'>{}</ept></seg>"
+            }
+        }
+    ],
+    "ConcTransResult": [],
+    "Errors": [],
+    "TotalConcResult": 2
+}

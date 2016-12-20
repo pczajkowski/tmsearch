@@ -57,7 +57,7 @@ func PostQuery(requestURL string, searchJSON []byte) *http.Response {
 	return resp
 }
 
-func Search(TMs TMList, text string) SearchResults {
+func (app *Application) Search(TMs []TM, text string) SearchResults {
 	searchString := "{ \"SearchExpression\": [ \"" + text + "\" ]}"
 	searchJSON := []byte(searchString)
 
@@ -67,7 +67,7 @@ func Search(TMs TMList, text string) SearchResults {
 	finalResults.SearchPhrase = text
 
 	var results []CleanedResults
-	for _, tm := range TMs.TMs {
+	for _, tm := range TMs {
 		getTM := tmURL + tm.TMGuid
 		concordanceURL := getTM + "/concordance"
 		requestURL := concordanceURL + app.AuthString
@@ -77,7 +77,7 @@ func Search(TMs TMList, text string) SearchResults {
 		if resp.StatusCode == 401 {
 			time.Sleep(app.Delay)
 			app.Login()
-			return Search(TMs, text)
+			return app.Search(TMs, text)
 		}
 
 		var tempResults ResultsFromServer

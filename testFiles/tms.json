@@ -1,0 +1,28 @@
+[
+    {
+        "AccessLevel": 1,
+        "Client": "",
+        "Domain": "",
+        "FriendlyName": "Test TM 1",
+        "NumEntries": 1000,
+        "Project": "",
+        "SourceLangCode": "ger-DE",
+        "Subject": "",
+        "TMGuid": "bc02a127-6599-4def-a5f3-something123",
+        "TMOwner": "testUser",
+        "TargetLangCode": "ita-IT"
+    },
+    {
+        "AccessLevel": 1,
+        "Client": "",
+        "Domain": "",
+        "FriendlyName": "Test TM 2",
+        "NumEntries": 1500,
+        "Project": "",
+        "SourceLangCode": "fre-FR",
+        "Subject": "",
+        "TMGuid": "a3b9c179-5bd2-43a8-a234-something456",
+        "TMOwner": "testUser",
+        "TargetLangCode": "ger-DE"
+    }
+]

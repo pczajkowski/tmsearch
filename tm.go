@@ -6,11 +6,9 @@ import (
 	"time"
 )
 
-type TMList struct {
-	TMs []struct {
-		NumEntries, AccessLevel                                                                         int
-		Client, Domain, FriendlyName, Project, SourceLangCode, Subject, TMGuid, TMOwner, TargetLangCode string
-	}
+type TM struct {
+	NumEntries, AccessLevel                                                                         int
+	Client, Domain, FriendlyName, Project, SourceLangCode, Subject, TMGuid, TMOwner, TargetLangCode string
 }
 
 func GetQuery(url string) *http.Response {
@@ -22,7 +20,7 @@ func GetQuery(url string) *http.Response {
 	return resp
 }
 
-func GetTMs(language string) TMList {
+func (app *Application) GetTMs(language string) []TM {
 	tmURL := app.BaseURL + "tms/"
 	var queryURL string
 	if language == "" {
@@ -36,11 +34,11 @@ func GetTMs(language string) TMList {
 	if resp.StatusCode == 401 {
 		time.Sleep(app.Delay)
 		app.Login()
-		return GetTMs(language)
+		return app.GetTMs(language)
 	}
 
-	var results TMList
-	JsonDecoder(resp.Body, &results.TMs)
+	var results []TM
+	JsonDecoder(resp.Body, &results)
 
 	return results
 }

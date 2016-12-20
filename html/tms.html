@@ -11,7 +11,7 @@
     </head>
     <body>
         <a href="/">Go back to start</a>
-        <h1>We have {{len .TMs}} TMs</h1>
+        <h1>We have {{len .}} TMs</h1>
             <table>
                 <tr style='text-align: left'>
                     <th>Name</th>
@@ -19,7 +19,7 @@
                     <th>Target language</th>
                     <th>No. of segments</th>
                 </tr>
-                {{range .TMs}}
+                {{range .}}
                     <tr style='text-align: left'>
                         <td><b>{{.FriendlyName}}</b></td>
                         <td>{{.SourceLangCode}}</td>
