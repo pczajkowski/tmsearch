@@ -8,27 +8,32 @@ import (
 	"time"
 )
 
+// Segment stores source and translated texts.
 type Segment struct {
 	Source, Target string
 }
 
+// Clean cleans <seg> tags from source and translated texts.
 func (s *Segment) Clean() {
 	re := regexp.MustCompile("</?seg>")
 	s.Source = re.ReplaceAllString(s.Source, "")
 	s.Target = re.ReplaceAllString(s.Target, "")
 }
 
+// CleanedResults stores processed results from given TM.
 type CleanedResults struct {
 	TMName   string
 	Segments []Segment
 }
 
+// SearchResults stores processed results from all TMs.
 type SearchResults struct {
 	SearchPhrase string
 	Results      []CleanedResults
 	TotalResults int
 }
 
+// ResultsFromServer stores results as received from server.
 type ResultsFromServer struct {
 	ConcResult []struct {
 		ConcordanceTextRanges []struct {
@@ -44,6 +49,7 @@ type ResultsFromServer struct {
 	TotalConcResult         int
 }
 
+// PostQuery sends POST query to server and returns response.
 func PostQuery(requestURL string, searchJSON []byte) *http.Response {
 	req, err := http.NewRequest("POST", requestURL, bytes.NewBuffer(searchJSON))
 	req.Header.Set("Content-Type", "application/json")
@@ -51,12 +57,13 @@ func PostQuery(requestURL string, searchJSON []byte) *http.Response {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Printf("error posting query: %v", err)
+		log.Printf("Error posting query: %v", err)
 	}
 
 	return resp
 }
 
+// Search searches for given phrase in given TMs.
 func (app *Application) Search(TMs []TM, text string) SearchResults {
 	searchString := "{ \"SearchExpression\": [ \"" + text + "\" ]}"
 	searchJSON := []byte(searchString)
@@ -81,7 +88,7 @@ func (app *Application) Search(TMs []TM, text string) SearchResults {
 		}
 
 		var tempResults ResultsFromServer
-		JsonDecoder(resp.Body, &tempResults)
+		JSONDecoder(resp.Body, &tempResults)
 
 		if tempResults.TotalConcResult > 0 {
 			var tmResults CleanedResults

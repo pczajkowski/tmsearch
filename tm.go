@@ -6,20 +6,23 @@ import (
 	"time"
 )
 
+// TM stores information about TM.
 type TM struct {
 	NumEntries, AccessLevel                                                                         int
 	Client, Domain, FriendlyName, Project, SourceLangCode, Subject, TMGuid, TMOwner, TargetLangCode string
 }
 
+// GetQuery sends GET query and returns response.
 func GetQuery(url string) *http.Response {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Printf("error getting query: %v", err)
+		log.Printf("Error getting query: %v", err)
 	}
 
 	return resp
 }
 
+// GetTMs returns list of TMs for given target language.
 func (app *Application) GetTMs(language string) []TM {
 	tmURL := app.BaseURL + "tms/"
 	var queryURL string
@@ -38,7 +41,7 @@ func (app *Application) GetTMs(language string) []TM {
 	}
 
 	var results []TM
-	JsonDecoder(resp.Body, &results)
+	JSONDecoder(resp.Body, &results)
 
 	return results
 }

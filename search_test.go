@@ -58,7 +58,7 @@ func TestSearch(t *testing.T) {
 	}
 
 	var tms []TM
-	JsonDecoder(tmsJSON, &tms)
+	JSONDecoder(tmsJSON, &tms)
 
 	testSourceSegment1 := "<bpt i='1' type='bold'>{}</bpt>Something Test/ Whatever<ept i='1'>{}</ept>"
 	testSourceSegment2 := "<bpt i='1' type='bold'>{}</bpt>Another Test/ Anything<ept i='1'>{}</ept>"

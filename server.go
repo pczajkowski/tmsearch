@@ -14,6 +14,7 @@ var url = flag.String("b", "", "API URL")
 var app Application
 var errorPage = template.Must(template.ParseFiles("./html/error.html"))
 
+// ServeIndex serves index page.
 func ServeIndex(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./html/index.html"))
 	t.Execute(w, app.Languages)
@@ -24,6 +25,7 @@ func add(x, y int) int {
 	return x + y
 }
 
+// DisplaySearchResults displays search results as HTML page.
 func DisplaySearchResults(w http.ResponseWriter, r *http.Request) {
 	language := r.URL.Query().Get("lang")
 	searchPhrase := r.URL.Query().Get("phrase")
@@ -50,6 +52,7 @@ func DisplaySearchResults(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// DisplayTMs displays TMs as HTML page.
 func DisplayTMs(w http.ResponseWriter, r *http.Request) {
 	language := r.URL.Query().Get("lang")
 
