@@ -76,6 +76,9 @@ func (app *Application) Login() {
 	if err != nil {
 		log.Fatalf("Error logging in: %v", err)
 	}
+	if resp.StatusCode != 200 {
+		log.Fatalf("Error logging in: %v", resp.Status)
+	}
 	defer resp.Body.Close()
 
 	JSONDecoder(resp.Body, &app)
