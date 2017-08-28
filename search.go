@@ -63,7 +63,28 @@ func PostQuery(requestURL string, searchJSON []byte) *http.Response {
 	return resp
 }
 
-// Search searches for given phrase in given TMs.
+func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) CleanedResults {
+	var tmResults CleanedResults
+	//64 is maximum returned by server
+	var numberOfSegments int
+	if tempResults.TotalConcResult > 64 {
+		numberOfSegments = 64
+	} else {
+		numberOfSegments = tempResults.TotalConcResult
+	}
+	//Allocating Segments array beforehand
+	tmResults.Segments = make([]Segment, 0, numberOfSegments)
+	tmResults.TMName = TMFriendlyName
+
+	for _, result := range tempResults.ConcResult {
+		segment := Segment{result.TMEntry.SourceSegment, result.TMEntry.TargetSegment}
+		segment.Clean()
+		tmResults.Segments = append(tmResults.Segments, segment)
+	}
+	return tmResults
+}
+
+// Search for given phrase in given TMs.
 func (app *Application) Search(TMs []TM, text string) SearchResults {
 	searchString := "{ \"SearchExpression\": [ \"" + text + "\" ]}"
 	searchJSON := []byte(searchString)
@@ -73,7 +94,6 @@ func (app *Application) Search(TMs []TM, text string) SearchResults {
 	var finalResults SearchResults
 	finalResults.SearchPhrase = text
 
-	var results []CleanedResults
 	for _, tm := range TMs {
 		getTM := tmURL + tm.TMGuid
 		concordanceURL := getTM + "/concordance"
@@ -91,20 +111,11 @@ func (app *Application) Search(TMs []TM, text string) SearchResults {
 		JSONDecoder(resp.Body, &tempResults)
 
 		if tempResults.TotalConcResult > 0 {
-			var tmResults CleanedResults
-			//Allocating Segments array beforehand
-			tmResults.Segments = make([]Segment, 0, tempResults.TotalConcResult)
-			tmResults.TMName = tm.FriendlyName
-
-			for _, result := range tempResults.ConcResult {
-				segment := Segment{result.TMEntry.SourceSegment, result.TMEntry.TargetSegment}
-				segment.Clean()
-				tmResults.Segments = append(tmResults.Segments, segment)
-			}
-			results = append(results, tmResults)
+			tmResults := getCleanedResults(tempResults, tm.FriendlyName)
+			finalResults.Results = append(finalResults.Results, tmResults)
 			finalResults.TotalResults += len(tmResults.Segments)
 		}
 	}
-	finalResults.Results = results
+
 	return finalResults
 }
