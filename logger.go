@@ -25,7 +25,7 @@ func GetInfoFromRequest(r *http.Request) (string, string, string) {
 
 // GetLogger returns new logger
 func GetLogger() *log.Logger {
-	logFile := filepath.Join("log", (time.Now().Format("200612") + ".log"))
+	logFile := filepath.Join("log", (time.Now().Format("20060102") + ".log"))
 	logOutput, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("Error creating log file: %v", err)
