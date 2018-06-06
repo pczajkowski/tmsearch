@@ -15,7 +15,7 @@ var app Application
 var errorPage = template.Must(template.ParseFiles("./html/error.html"))
 
 // ServeIndex serves index page.
-func ServeIndex(w http.ResponseWriter, r *http.Request) {
+func serveIndex(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./html/index.html"))
 	t.Execute(w, app.Languages)
 }
@@ -26,15 +26,16 @@ func add(x, y int) int {
 }
 
 // DisplaySearchResults displays search results as HTML page.
-func DisplaySearchResults(w http.ResponseWriter, r *http.Request) {
-	language := r.URL.Query().Get("lang")
-	searchPhrase := r.URL.Query().Get("phrase")
+func displaySearchResults(w http.ResponseWriter, r *http.Request) {
+	var info SearchInfo
+	info.GetInfoFromRequest(r)
 
-	if searchPhrase != "" {
+	if info.Phrase != "" {
 		var searchResults SearchResults
-		if language == "" || app.CheckLanguage(language) {
-			searchResults = app.Search(app.GetTMs(language), searchPhrase)
-			WriteLog(r, searchResults.TotalResults)
+		if info.LanguageCode == "" || app.CheckLanguage(info.LanguageCode) {
+			searchResults = app.Search(app.GetTMs(info.LanguageCode), info.Phrase)
+			info.ResultsServed = searchResults.TotalResults
+			WriteLog(info)
 		} else {
 			errorPage.Execute(w, "Language not valid!")
 			return
@@ -53,13 +54,15 @@ func DisplaySearchResults(w http.ResponseWriter, r *http.Request) {
 }
 
 // DisplayTMs displays TMs as HTML page.
-func DisplayTMs(w http.ResponseWriter, r *http.Request) {
-	language := r.URL.Query().Get("lang")
+func displayTMs(w http.ResponseWriter, r *http.Request) {
+	var info SearchInfo
+	info.GetInfoFromRequest(r)
 
 	var TMList []TM
-	if language == "" || app.CheckLanguage(language) {
-		TMList = app.GetTMs(language)
-		WriteLog(r, len(TMList))
+	if info.LanguageCode == "" || app.CheckLanguage(info.LanguageCode) {
+		TMList = app.GetTMs(info.LanguageCode)
+		info.ResultsServed = len(TMList)
+		WriteLog(info)
 	} else {
 		errorPage.Execute(w, "Language not valid!")
 		return
@@ -85,8 +88,8 @@ func main() {
 	app.Delay = time.Duration(20 * time.Second)
 
 	hostname := *host + ":" + *port
-	http.HandleFunc("/", ServeIndex)
-	http.HandleFunc("/q", DisplaySearchResults)
-	http.HandleFunc("/tms", DisplayTMs)
+	http.HandleFunc("/", serveIndex)
+	http.HandleFunc("/q", displaySearchResults)
+	http.HandleFunc("/tms", displayTMs)
 	log.Fatal(http.ListenAndServe(hostname, nil))
 }
