@@ -1,48 +1,64 @@
 package main
 
 import (
+	"encoding/csv"
 	"log"
 	"net"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
+	"strconv"
 )
 
-// GetInfoFromRequest reads information from given request and returns them as tuple.
-func GetInfoFromRequest(r *http.Request) (string, string, string) {
-	host, _, _ := net.SplitHostPort(r.RemoteAddr)
-	searchPhrase := r.URL.Query().Get("phrase")
-	language := r.URL.Query().Get("lang")
-	if language == "" {
-		language = "All languages"
-	} else {
-		language = app.Languages[language]
-	}
+const (
+	timeFormat = "2006-01-02 15:04"
+	dateFormat = "20060102"
+)
 
-	return host, searchPhrase, language
+type searchInfo struct {
+	Date time.Time
+	Host, Phrase, Language string
+	ResultsServed int
 }
 
-// GetLogger returns new logger
-func GetLogger() *log.Logger {
-	logFile := filepath.Join("log", (time.Now().Format("20060102") + ".log"))
+func (s *searchInfo) ToArray() []string {
+	return []string{s.Date.Format(timeFormat), s.Host, s.Phrase, s.Language, strconv.Itoa(s.ResultsServed)}
+}
+
+func getInfoFromRequest(r *http.Request) searchInfo {
+	info := searchInfo{Date: time.Now()}
+	info.Host, _, _ = net.SplitHostPort(r.RemoteAddr)
+	info.Phrase = r.URL.Query().Get("phrase")
+
+	language := r.URL.Query().Get("lang")
+	if language == "" {
+		info.Language = "All languages"
+	} else {
+		info.Language = app.Languages[language]
+	}
+
+	return info
+}
+
+func getWriter() *csv.Writer {
+	logFile := filepath.Join("log", (time.Now().Format(dateFormat) + ".log"))
 	logOutput, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("Error creating log file: %v", err)
 	}
 
-	logger := log.New(logOutput, "", log.Ldate|log.Ltime)
-	return logger
+	writer := csv.NewWriter(logOutput)
+	return writer
 }
 
-// Logger main function, saves event to the log.
-func Logger(r *http.Request, resultsServed int) {
-	host, searchPhrase, language := GetInfoFromRequest(r)
-	logger := GetLogger()
+// WriteLog main function, saves event to the log.
+func WriteLog(r *http.Request, resultsServed int) {
+	info := getInfoFromRequest(r)
+	info.ResultsServed = resultsServed
 
-	if searchPhrase != "" {
-		logger.Printf(",%v,\"%v\",\"%v\",%v\n", host, searchPhrase, language, resultsServed)
-	} else {
-		logger.Printf(",%v,TMS,\"%v\",%v\n", host, language, resultsServed)
-	}
+	writer := getWriter()
+
+	writer.Write(info.ToArray())
+	writer.Flush()
 }

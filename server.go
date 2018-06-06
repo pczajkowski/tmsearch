@@ -34,7 +34,7 @@ func DisplaySearchResults(w http.ResponseWriter, r *http.Request) {
 		var searchResults SearchResults
 		if language == "" || app.CheckLanguage(language) {
 			searchResults = app.Search(app.GetTMs(language), searchPhrase)
-			Logger(r, searchResults.TotalResults)
+			WriteLog(r, searchResults.TotalResults)
 		} else {
 			errorPage.Execute(w, "Language not valid!")
 			return
@@ -59,7 +59,7 @@ func DisplayTMs(w http.ResponseWriter, r *http.Request) {
 	var TMList []TM
 	if language == "" || app.CheckLanguage(language) {
 		TMList = app.GetTMs(language)
-		Logger(r, len(TMList))
+		WriteLog(r, len(TMList))
 	} else {
 		errorPage.Execute(w, "Language not valid!")
 		return
