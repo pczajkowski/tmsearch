@@ -29,7 +29,11 @@ func (s *searchInfo) ToArray() []string {
 func getInfoFromRequest(r *http.Request) searchInfo {
 	info := searchInfo{Date: time.Now()}
 	info.Host, _, _ = net.SplitHostPort(r.RemoteAddr)
+
 	info.Phrase = r.URL.Query().Get("phrase")
+	if info.Phrase == "" {
+		info.Phrase = "TMS"
+	}
 
 	language := r.URL.Query().Get("lang")
 	if language == "" {
