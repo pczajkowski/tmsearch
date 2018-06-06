@@ -7,7 +7,7 @@ It provides simple HTML interface which of course can be improved. There's also 
 
 You just need to build it and make sure that subfolders **html** and **log** are present in the same location as your binary. You'll also need **secrets.json**, just make sure you fill it with proper credentials. Account used needs to be able to list TMs on your server and read their content, of course. It's using only standard GO packages, so there are no external dependencies.
 
-Usage is simple. To get started just launch compiled binary with *-b* switch followed by the URL of your Resources API. Now just navigate to *localhost/* in your browser and start searching your TMs. You may also want to adjust *html/languages.json* to be more relevant to your environment.
+Usage is simple. To get started just ***launch compiled binary with *-b* switch followed by the URL of your Resources API***. Now just navigate to *localhost/* in your browser and start searching your TMs. You may also want to adjust *html/languages.json* to be more relevant to your environment.
 
 Optional parameters are as follows:
 
