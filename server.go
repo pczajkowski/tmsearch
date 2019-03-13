@@ -80,7 +80,7 @@ func main() {
 	flag.Parse()
 	app.SetBaseURL(*url)
 	if app.BaseURL == "" {
-		log.Panicln("Can't do anything without URL to API")
+		log.Fatalln("Can't do anything without URL to API")
 	}
 
 	app.Login()
