@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"log"
 	"net/http"
 	"regexp"
@@ -84,10 +85,26 @@ func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) Cle
 	return tmResults
 }
 
+type searchQuery struct {
+	SearchExpression []string
+}
+
+func getSearchJSON(text string) []byte {
+	query := searchQuery{}
+	query.SearchExpression = append(query.SearchExpression, text)
+
+	queryJSON, err := json.Marshal(query)
+	if err != nil {
+		log.Printf("Error marshalling query: %v", err)
+		return []byte{}
+	}
+
+	return queryJSON
+}
+
 // Search for given phrase in given TMs.
 func (app *Application) Search(TMs []TM, text string) SearchResults {
-	searchString := "{ \"SearchExpression\": [ \"" + text + "\" ]}"
-	searchJSON := []byte(searchString)
+	searchJSON := getSearchJSON(text)
 
 	tmURL := app.BaseURL + "tms/"
 
