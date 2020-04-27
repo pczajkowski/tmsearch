@@ -46,6 +46,17 @@
 		    	Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
 		        	.sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
 		        	.forEach(tr => table.appendChild(tr) );
+
+			const sorted = " (sorted)";
+			if (!th.textContent.includes(sorted)) {
+				th.textContent += sorted;
+			}
+
+			th.parentNode.childNodes.forEach((child) => {
+				if (child != th) {
+					child.textContent = child.textContent.replace(sorted, "");
+				}
+			});
 		})));
 	</script>
     </body>
