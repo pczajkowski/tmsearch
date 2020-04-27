@@ -1,64 +1,92 @@
 <!doctype html>
 <html>
-    <head>
-        <title>Search results for "{{.SearchPhrase}}"</title>
-        <style>
-		table, th, td {
-                	border: 1px solid black;
-	                border-collapse: collapse;
-        	}
-		th {
-			cursor: pointer;
-		}
-        </style>
-    </head>
-    <body>
-        <a href="/">Search again</a>
-            <table>
-                <tr style='text-align: left'>
-                    <th>Source</th>
-                    <th>Translation</th>
-                    <th>TM</th>
-                </tr>
-        	{{range $result := .Results}}
-                	{{range $segment := $result.Segments}}
-	                    <tr style='text-align: left'>
-                	        <td>{{$segment.Source}}</td>
-                        	<td>{{$segment.Target}}</td>
-				<td>{{$result.TMName}}</td>
-	                    </tr>
-        	        {{end}}
-        	{{end}}
-            </table>
-            <br/>
-            <a href="/">Search again</a>
-	<script>
-		// borrowed from https://stackoverflow.com/a/49041392/7342859
-		const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
-
-		const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
-		    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-		    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
-
-		// do the work...
-		document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
-			const table = th.closest('table');
-		    	Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
-		        	.sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-		        	.forEach(tr => table.appendChild(tr) );
-
-			const sorted = " (sorted)";
-			if (!th.textContent.includes(sorted)) {
-				th.textContent += sorted;
+	<head>
+		<title>Search results for "{{.SearchPhrase}}"</title>
+		<style>
+			table, th, td {
+				border: 1px solid black;
+				border-collapse: collapse;
 			}
+			th {
+				cursor: pointer;
+			}
+		</style>
+		<script>
+			let filterTable = function(value) {
+				const filter = value.toUpperCase();
+				let table = document.getElementsByTagName("tbody")[0];
+				let tr = table.getElementsByTagName("tr");
 
-			th.parentNode.childNodes.forEach((child) => {
-				if (child != th) {
-					child.textContent = child.textContent.replace(sorted, "");
+				for (let i = 0; i < tr.length; i++) {
+					tr[i].style.display = "none";
+
+					let td = tr[i].getElementsByTagName("td");
+					for (var j = 0; j < td.length; j++) {
+						let cell = tr[i].getElementsByTagName("td")[j];
+						if (cell) {
+							if (cell.innerText.toUpperCase().indexOf(filter) > -1) {
+								tr[i].style.display = "";
+								break;
+							} 
+						}
+					}
 				}
-			});
-		})));
-	</script>
-    </body>
-</html>
+			};
+		</script>
+	</head>
+	<body>
+		<a href="/">Search again</a>
+		<div>Filter: 
+			<input type="text" name="name" onchange="filterTable(this.value)" autocomplete="off">
+		</div>
+		<table>
+			<thead>
+				<tr style='text-align: left'>
+					<th>Source</th>
+					<th>Translation</th>
+					<th>TM</th>
+				</tr>
+			</thead>
+			<tbody>
+			{{range $result := .Results}}
+				{{range $segment := $result.Segments}}
+				<tr style='text-align: left'>
+					<td>{{$segment.Source}}</td>
+					<td>{{$segment.Target}}</td>
+					<td>{{$result.TMName}}</td>
+				</tr>
+				{{end}}
+			{{end}}
+			</tbody>
+		</table>
+		<br/>
+		<a href="/">Search again</a>
+		<script>
+			// borrowed from https://stackoverflow.com/a/49041392/7342859
+			const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
 
+			const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+				v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+				)(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+			// do the work...
+			document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+				const table = th.closest('table');
+				Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+					.sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+					.forEach(tr => table.appendChild(tr) );
+
+				const sorted = " (sorted)";
+				if (!th.textContent.includes(sorted)) {
+					th.textContent += sorted;
+				}
+
+				th.parentNode.childNodes.forEach((child) => {
+					if (child != th) {
+						child.textContent = child.textContent.replace(sorted, "");
+					}
+				});
+			})));
+		</script>
+	</body>
+</html>
