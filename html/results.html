@@ -40,13 +40,16 @@
 				for (let i = 0; i < tr.length; i++) {
 					tr[i].style.display = "";
 				}
+
+				let filter = document.getElementById("filter");
+				filter.value = "";
 			};
 		</script>
 	</head>
 	<body>
 		<a href="/">Search again</a>
 		<div>Filter: 
-			<input type="text" name="name" onchange="filterTable(this.value)" autocomplete="off">
+			<input id="filter" type="text" name="name" onchange="filterTable(this.value)" autocomplete="off">
 			<button class="btn" onclick="clearFilter()">Clear</button>
 		</div>
 		<table>
