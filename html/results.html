@@ -3,32 +3,51 @@
     <head>
         <title>Search results for "{{.SearchPhrase}}"</title>
         <style>
-            table, th, td {
-                border: 1px solid black;
-                border-collapse: collapse;
-            }
+		table, th, td {
+                	border: 1px solid black;
+	                border-collapse: collapse;
+        	}
+		th {
+			cursor: pointer;
+		}
         </style>
     </head>
     <body>
         <a href="/">Search again</a>
-        {{range .Results}}
-            <h1>Results from {{.TMName}} ({{len .Segments}} results)</h1>
             <table>
                 <tr style='text-align: left'>
-                    <th>No.</th>
                     <th>Source</th>
                     <th>Translation</th>
+                    <th>TM</th>
                 </tr>
-                {{range $i, $segment := .Segments}}
-                    <tr style='text-align: left'>
-                        <td>{{add $i 1}}</td>
-                        <td>{{$segment.Source}}</td>
-                        <td>{{$segment.Target}}</td>
-                    </tr>
-                {{end}}
+        	{{range $result := .Results}}
+                	{{range $segment := $result.Segments}}
+	                    <tr style='text-align: left'>
+                	        <td>{{$segment.Source}}</td>
+                        	<td>{{$segment.Target}}</td>
+				<td>{{$result.TMName}}</td>
+	                    </tr>
+        	        {{end}}
+        	{{end}}
             </table>
             <br/>
             <a href="/">Search again</a>
-        {{end}}
+	<script>
+		// borrowed from https://stackoverflow.com/a/49041392/7342859
+		const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+		const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+		    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+		    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+		// do the work...
+		document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+		const table = th.closest('table');
+		    Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+		        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+		        .forEach(tr => table.appendChild(tr) );
+		})));
+	</script>
     </body>
 </html>
+
