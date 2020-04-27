@@ -20,11 +20,6 @@ func serveIndex(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, app.Languages)
 }
 
-//Addition for counter
-func add(x, y int) int {
-	return x + y
-}
-
 // DisplaySearchResults displays search results as HTML page.
 func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
