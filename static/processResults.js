@@ -51,7 +51,7 @@ app.sortTable = function() {
 	// borrowed from https://stackoverflow.com/a/49041392/7342859
 	document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
 		const table = document.getElementById("dataRows");
-		Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+		Array.from(table.querySelectorAll('tr'))
 			.sort(app.comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
 			.forEach(tr => table.appendChild(tr) );
 
