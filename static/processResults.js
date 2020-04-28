@@ -29,10 +29,16 @@ app.filterTable = function(value) {
 	}
 };
 
+app.sorted = " (sorted)";
+
 app.clearFilter = function() {
 	let filter = document.getElementById("filter");
 	filter.value = "";
 	app.filterTable("");
+
+	document.querySelectorAll('th').forEach(th => {
+		th.textContent = th.textContent.replace(app.sorted, "");
+	});
 };
 
 app.getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
@@ -49,14 +55,13 @@ app.sortTable = function() {
 			.sort(app.comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
 			.forEach(tr => table.appendChild(tr) );
 
-		const sorted = " (sorted)";
-		if (!th.textContent.includes(sorted)) {
-			th.textContent += sorted;
+		if (!th.textContent.includes(app.sorted)) {
+			th.textContent += app.sorted;
 		}
 
 		th.parentNode.childNodes.forEach((child) => {
 			if (child != th) {
-				child.textContent = child.textContent.replace(sorted, "");
+				child.textContent = child.textContent.replace(app.sorted, "");
 			}
 		});
 	})));
