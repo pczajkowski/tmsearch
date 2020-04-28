@@ -1,9 +1,17 @@
 let app = {};
 
 app.filterTable = function(value) {
-	const filter = value.toUpperCase();
 	let data = document.getElementById("dataRows");
 	let rows = data.getElementsByTagName("tr");
+	if (value === "") {
+		for (let i = 0; i < rows.length; i++) {
+			let row = rows[i];
+			row.style.display = "";
+		}
+		return;
+	}
+
+	const filter = value.toUpperCase();	
 
 	for (let i = 0; i < rows.length; i++) {
 		let row = rows[i];
@@ -22,15 +30,9 @@ app.filterTable = function(value) {
 };
 
 app.clearFilter = function() {
-	let table = document.getElementsByTagName("tbody")[0];
-	let tr = table.getElementsByTagName("tr");
-
-	for (let i = 0; i < tr.length; i++) {
-		tr[i].style.display = "";
-	}
-
 	let filter = document.getElementById("filter");
 	filter.value = "";
+	app.filterTable("");
 };
 
 app.sortTable = function() {
