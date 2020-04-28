@@ -2,7 +2,7 @@ let app = {};
 
 app.filterTable = function(value) {
 	const filter = value.toUpperCase();
-	let table = document.getElementsByTagName("tbody")[0];
+	let table = document.getElementById("dataRows");
 	let tr = table.getElementsByTagName("tr");
 
 	for (let i = 0; i < tr.length; i++) {

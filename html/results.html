@@ -27,7 +27,7 @@
 					<th>TM</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="dataRows">
 			{{range $result := .Results}}
 				{{range $segment := $result.Segments}}
 				<tr style='text-align: left'>
