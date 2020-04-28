@@ -14,10 +14,12 @@
 		<script type="text/javascript" src="/static/processResults.js"></script>
 	</head>
 	<body onload="app.sortTable()">
-		<a href="/">Search again</a>
+		<div><a href="/"><b>Search again</b></a></div>
+		<br/>
 		<div>Filter: 
-			<input id="filter" type="text" name="name" onchange="app.filterTable(this.value)" autocomplete="off">
-			<button class="btn" onclick="app.clearFilter()">Clear</button>
+			<input id="filter" type="text" name="name" placeholder="type phrase<ENTER>" onchange="app.filterTable(this.value)" autocomplete="off">
+			<button class="btn" onclick="app.clearFilter()">Clear filter</button>
+			<i>Click on column to sort</i>
 		</div>
 		<table>
 			<thead>
