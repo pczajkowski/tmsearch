@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<title>Search results for "{{.SearchPhrase}}"</title>
@@ -11,9 +11,9 @@
 				cursor: pointer;
 			}
 		</style>
-		<script src="./processResults.js"></script>
+		<script type="text/javascript" src="/static/processResults.js"></script>
 	</head>
-	<body>
+	<body onload="app.sortTable()">
 		<a href="/">Search again</a>
 		<div>Filter: 
 			<input id="filter" type="text" name="name" onchange="app.filterTable(this.value)" autocomplete="off">

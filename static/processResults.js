@@ -61,5 +61,3 @@ app.sortTable = function() {
 	})));
 
 };
-
-app.sortTable();

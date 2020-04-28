@@ -37,8 +37,7 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if len(searchResults.Results) > 0 {
-			funcs := template.FuncMap{"add": add}
-			t := template.Must(template.New("results.html").Funcs(funcs).ParseFiles("./html/results.html"))
+			t := template.Must(template.New("results.html").ParseFiles("./html/results.html"))
 			t.Execute(w, searchResults)
 		} else {
 			errorPage.Execute(w, "Nothing found!")
@@ -86,5 +85,6 @@ func main() {
 	http.HandleFunc("/", serveIndex)
 	http.HandleFunc("/q", displaySearchResults)
 	http.HandleFunc("/tms", displayTMs)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	log.Fatal(http.ListenAndServe(hostname, nil))
 }
