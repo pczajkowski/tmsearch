@@ -2,20 +2,20 @@ let app = {};
 
 app.filterTable = function(value) {
 	const filter = value.toUpperCase();
-	let table = document.getElementById("dataRows");
-	let tr = table.getElementsByTagName("tr");
+	let data = document.getElementById("dataRows");
+	let rows = data.getElementsByTagName("tr");
 
-	for (let i = 0; i < tr.length; i++) {
-		tr[i].style.display = "none";
+	for (let i = 0; i < rows.length; i++) {
+		let row = rows[i];
+		row.style.display = "none";
 
-		let td = tr[i].getElementsByTagName("td");
-		for (var j = 0; j < td.length; j++) {
-			let cell = tr[i].getElementsByTagName("td")[j];
-			if (cell) {
-				if (cell.innerText.toUpperCase().indexOf(filter) > -1) {
-					tr[i].style.display = "";
-					break;
-				} 
+		let cells = row.getElementsByTagName("td");
+		for (let j = 0; j < cells.length; j++) {
+			let cell = cells[j];
+
+			if (cell.innerText.toUpperCase().indexOf(filter) > -1) {
+				row.style.display = "";
+				break;
 			}
 		}
 	}
