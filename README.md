@@ -1,7 +1,7 @@
 # TM Search for memoQ Server
 [![Go Report Card](https://goreportcard.com/badge/github.com/pczajkowski/tmsearch)](https://goreportcard.com/report/github.com/pczajkowski/tmsearch)
 
-This is a proof-of-concept tool (hobby project) which utilizes [memoQ server Resources API](https://www.memoq.com/en/the-memoq-apis/memoq-server-resources-api).
+This is a proof-of-concept tool (hobby project) which utilizes [memoQ server Resources API](https://docs.memoq.com/current/api-docs/resapi/APIHelp.html).
 
 It provides simple HTML interface which of course can be improved. There's also logging mechanism which collects requestor's IP, phrase he was searching for, target language and number of served results. Logs are saved in *log* subfolder in separate *.log* files (one per day) in CSV format.
 
