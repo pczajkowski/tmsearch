@@ -47,14 +47,9 @@ func (app *Application) LoadLanguages() {
 	JSONDecoder(data, &app.Languages)
 }
 
-// CheckLanguage checks if language is in the map.
-func (app Application) CheckLanguage(language string) bool {
+func (app Application) checkLanguage(language string) bool {
 	_, ok := app.Languages[language]
-	if !ok {
-		return false
-	}
-
-	return true
+	return ok
 }
 
 // Login logs into the API and sets AuthString.

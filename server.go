@@ -27,7 +27,7 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 
 	if info.Phrase != "" {
 		var searchResults SearchResults
-		if info.LanguageCode == "" || app.CheckLanguage(info.LanguageCode) {
+		if info.LanguageCode == "" || app.checkLanguage(info.LanguageCode) {
 			searchResults = app.Search(app.GetTMs(info.LanguageCode), info.Phrase)
 			info.ResultsServed = searchResults.TotalResults
 			WriteLog(info)
@@ -53,7 +53,7 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 	info.GetInfoFromRequest(r)
 
 	var TMList []TM
-	if info.LanguageCode == "" || app.CheckLanguage(info.LanguageCode) {
+	if info.LanguageCode == "" || app.checkLanguage(info.LanguageCode) {
 		TMList = app.GetTMs(info.LanguageCode)
 		info.ResultsServed = len(TMList)
 		WriteLog(info)
