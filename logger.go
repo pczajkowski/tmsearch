@@ -14,7 +14,7 @@ const (
 
 func getWriter() *csv.Writer {
 	logFile := filepath.Join("log", (time.Now().Format(dateFormat) + ".log"))
-	logOutput, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logOutput, err := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 	if err != nil {
 		log.Fatalf("Error creating log file: %v", err)
 	}
