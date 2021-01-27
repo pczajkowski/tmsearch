@@ -38,10 +38,10 @@ func JSONDecoder(data io.ReadCloser, target interface{}) {
 // LoadLanguages loads languages from languages.json to map.
 func (app *Application) LoadLanguages() {
 	data, err := os.Open("./html/languages.json")
-	defer data.Close()
 	if err != nil {
 		log.Fatalf("Error reading languages: %v", err)
 	}
+	defer data.Close()
 
 	app.Languages = make(map[string]string)
 	JSONDecoder(data, &app.Languages)

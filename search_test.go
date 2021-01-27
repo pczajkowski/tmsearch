@@ -51,11 +51,11 @@ func TestSearch(t *testing.T) {
 	app.SetBaseURL(server.URL)
 
 	tmsJSON, err := os.Open("./testFiles/tms.json")
-	defer tmsJSON.Close()
 	if err != nil {
 		t.Fatalf("error reading tms: %v", err)
 		return
 	}
+	defer tmsJSON.Close()
 
 	var tms []TM
 	JSONDecoder(tmsJSON, &tms)
