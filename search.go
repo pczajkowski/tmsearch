@@ -1,11 +1,8 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
-	"fmt"
 	"log"
-	"net/http"
 	"regexp"
 	"time"
 )
@@ -49,23 +46,6 @@ type ResultsFromServer struct {
 	}
 	ConcTransResult, Errors []string
 	TotalConcResult         int
-}
-
-func postQuery(requestURL string, searchJSON []byte) (*http.Response, error) {
-	req, err := http.NewRequest("POST", requestURL, bytes.NewBuffer(searchJSON))
-	if err != nil {
-		return nil, fmt.Errorf("Error creating post request: %s", err)
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("Error posting query: %v", err)
-	}
-
-	return resp, nil
 }
 
 func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) CleanedResults {
