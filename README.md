@@ -1,5 +1,6 @@
 # TM Search for memoQ Server
 [![Go Report Card](https://goreportcard.com/badge/github.com/pczajkowski/tmsearch)](https://goreportcard.com/report/github.com/pczajkowski/tmsearch)
+[![DeepSource](https://deepsource.io/gh/pczajkowski/tmsearch.svg/?label=active+issues&show_trend=true)](https://deepsource.io/gh/pczajkowski/tmsearch/?ref=repository-badge)
 
 This is a proof-of-concept tool (hobby project) which utilizes [memoQ server Resources API](https://docs.memoq.com/current/api-docs/resapi/APIHelp.html).
 
