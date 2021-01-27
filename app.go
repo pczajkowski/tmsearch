@@ -1,12 +1,10 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"io"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -68,11 +66,7 @@ func (app *Application) Login() {
 
 	loginURL := app.BaseURL + "auth/login"
 
-	req, err := http.NewRequest("POST", loginURL, bytes.NewBuffer(credentials))
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := postQuery(loginURL, credentials)
 	if err != nil {
 		log.Fatalf("Error logging in: %v", err)
 	}
