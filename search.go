@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"regexp"
@@ -50,18 +51,21 @@ type ResultsFromServer struct {
 	TotalConcResult         int
 }
 
-// PostQuery sends POST query to server and returns response.
-func PostQuery(requestURL string, searchJSON []byte) *http.Response {
+func postQuery(requestURL string, searchJSON []byte) (*http.Response, error) {
 	req, err := http.NewRequest("POST", requestURL, bytes.NewBuffer(searchJSON))
+	if err != nil {
+		return nil, fmt.Errorf("Error creating post request: %s", err)
+	}
+
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Printf("Error posting query: %v", err)
+		return nil, fmt.Errorf("Error posting query: %v", err)
 	}
 
-	return resp
+	return resp, nil
 }
 
 func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) CleanedResults {
@@ -116,8 +120,13 @@ func (app *Application) Search(TMs []TM, text string) SearchResults {
 		concordanceURL := getTM + "/concordance"
 		requestURL := concordanceURL + app.AuthString
 
-		resp := PostQuery(requestURL, searchJSON)
+		resp, err := postQuery(requestURL, searchJSON)
+		if err != nil {
+			log.Println(err)
+			return finalResults
+		}
 		defer resp.Body.Close()
+
 		if resp.StatusCode == 401 {
 			time.Sleep(app.Delay)
 			app.Login()
