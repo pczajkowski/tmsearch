@@ -11,7 +11,7 @@ app.filterTable = function(value) {
 		return;
 	}
 
-	const filter = value.toUpperCase();	
+	const filter = value.toUpperCase();
 
 	for (let i = 0; i < rows.length; i++) {
 		let row = rows[i];
@@ -43,7 +43,7 @@ app.clearFilter = function() {
 
 app.getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
 
-app.comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+app.comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 		v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
 	)(app.getCellValue(asc ? a : b, idx), app.getCellValue(asc ? b : a, idx));
 
@@ -60,7 +60,7 @@ app.sortTable = function() {
 		}
 
 		th.parentNode.childNodes.forEach((child) => {
-			if (child != th) {
+			if (child !== th) {
 				child.textContent = child.textContent.replace(app.sorted, "");
 			}
 		});
