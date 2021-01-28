@@ -53,7 +53,7 @@ app.sortTable = function() {
 		const table = document.getElementById("dataRows");
 		Array.from(table.querySelectorAll('tr'))
 			.sort(app.comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-			.forEach(tr => table.appendChild(tr) );
+			.forEach(tr => table.appendChild(tr));
 
 		if (!th.textContent.includes(app.sorted)) {
 			th.textContent += app.sorted;
