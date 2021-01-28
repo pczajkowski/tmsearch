@@ -49,7 +49,7 @@ app.comparer = (idx, asc) => (a, b) => ((v1, v2) =>
 
 app.sortTable = function() {
 	// borrowed from https://stackoverflow.com/a/49041392/7342859
-	document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+	document.querySelectorAll('th').forEach(th => th.addEventListener('click', () => {
 		const table = document.getElementById("dataRows");
 		Array.from(table.querySelectorAll('tr'))
 			.sort(app.comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
@@ -64,6 +64,6 @@ app.sortTable = function() {
 				child.textContent = child.textContent.replace(app.sorted, "");
 			}
 		});
-	})));
+	}));
 
 };
