@@ -8,3 +8,12 @@ enabled = true
 
   [analyzers.meta]
   import_paths = ["github.com/pczajkowski/tmsearch"]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  environment = ["browser"]
+  style_guide = "standard"
+  dialect = "flow"
