@@ -1,11 +1,11 @@
-let app = {};
+const app = {};
 
 app.filterTable = function(value) {
-	let data = document.getElementById("dataRows");
-	let rows = data.getElementsByTagName("tr");
+	const data = document.getElementById("dataRows");
+	const rows = data.getElementsByTagName("tr");
 	if (value === "") {
 		for (let i = 0; i < rows.length; i++) {
-			let row = rows[i];
+			const row = rows[i];
 			row.style.display = "";
 		}
 		return;
@@ -14,12 +14,12 @@ app.filterTable = function(value) {
 	const filter = value.toUpperCase();
 
 	for (let i = 0; i < rows.length; i++) {
-		let row = rows[i];
+		const row = rows[i];
 		row.style.display = "none";
 
-		let cells = row.getElementsByTagName("td");
+		const cells = row.getElementsByTagName("td");
 		for (let j = 0; j < cells.length; j++) {
-			let cell = cells[j];
+			const cell = cells[j];
 
 			if (cell.innerText.toUpperCase().indexOf(filter) > -1) {
 				row.style.display = "";
@@ -32,7 +32,7 @@ app.filterTable = function(value) {
 app.sorted = " (sorted)";
 
 app.clearFilter = function() {
-	let filter = document.getElementById("filter");
+	const filter = document.getElementById("filter");
 	filter.value = "";
 	app.filterTable("");
 
