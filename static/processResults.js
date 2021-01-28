@@ -44,8 +44,8 @@ app.clearFilter = function() {
 app.getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
 
 app.comparer = (idx, asc) => (a, b) => ((v1, v2) =>
-		v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-	)(app.getCellValue(asc ? a : b, idx), app.getCellValue(asc ? b : a, idx));
+	v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+)(app.getCellValue(asc ? a : b, idx), app.getCellValue(asc ? b : a, idx));
 
 app.sortTable = function() {
 	// borrowed from https://stackoverflow.com/a/49041392/7342859
@@ -65,5 +65,4 @@ app.sortTable = function() {
 			}
 		});
 	}));
-
 };
