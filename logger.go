@@ -30,18 +30,20 @@ func writeLog(info SearchInfo) {
 		return
 	}
 
+	defer func() {
+		if err := file.Close(); err != nil {
+			log.Printf("Error closing csv: %s", err)
+		}
+	}()
+
 	writer.Write(info.ToArray())
 	if err := writer.Error(); err != nil {
 		log.Printf("Error writing csv: %s", err)
+		return
 	}
 
 	writer.Flush()
 	if err := writer.Error(); err != nil {
 		log.Printf("Error flushing csv: %s", err)
-	}
-
-	file.Close()
-	if err := file.Close(); err != nil {
-		log.Printf("Error closing csv: %s", err)
 	}
 }
