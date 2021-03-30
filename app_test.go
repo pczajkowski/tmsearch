@@ -25,13 +25,12 @@ func TestLoadLanguages(t *testing.T) {
 	testLanguageCode := "dan"
 	testLanguage := "Danish"
 
-	t.Log("Testing if languages have been successfully loaded to app.Languages dictionary.")
-	_, ok := app.Languages[testLanguageCode]
+	fromMap, ok := app.Languages[testLanguageCode]
 	if !ok {
 		t.Fatalf("There's no key '%v'!", testLanguageCode)
-	} else if app.Languages[testLanguageCode] == testLanguage {
-		t.Log("Languages are in dictionary!")
-	} else {
+	}
+
+	if fromMap != testLanguage {
 		t.Fatalf("Value of key '%v' isn't '%v'", testLanguageCode, testLanguage)
 	}
 }
