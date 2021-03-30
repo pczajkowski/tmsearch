@@ -72,7 +72,7 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	flag.Parse()
-	app.SetBaseURL(*url)
+	app.setBaseURL(*url)
 	if app.BaseURL == "" {
 		log.Fatalln("Can't do anything without URL to API")
 	}

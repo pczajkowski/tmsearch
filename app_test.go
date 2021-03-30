@@ -11,14 +11,14 @@ func TestSetBaseURL(t *testing.T) {
 
 	t.Log("Testing if mandatory slash is added to the end of BaseURL.")
 	var app Application
-	app.SetBaseURL(urlWithSlash)
+	app.setBaseURL(urlWithSlash)
 	if strings.HasSuffix(app.BaseURL, "//") {
 		t.Errorf("URL has been malformed: %v", app.BaseURL)
 	} else {
 		t.Log("URL with slash was set correctly!")
 	}
 
-	app.SetBaseURL(urlWithoutSlash)
+	app.setBaseURL(urlWithoutSlash)
 	if !strings.HasSuffix(app.BaseURL, "/") {
 		t.Errorf("URL has been malformed: %v", app.BaseURL)
 	} else {

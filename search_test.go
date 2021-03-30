@@ -48,7 +48,7 @@ func TestSearch(t *testing.T) {
 	defer server.Close()
 
 	var app Application
-	app.SetBaseURL(server.URL)
+	app.setBaseURL(server.URL)
 
 	tmsJSON, err := os.Open("./testFiles/tms.json")
 	if err != nil {

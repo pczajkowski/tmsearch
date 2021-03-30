@@ -17,8 +17,7 @@ type Application struct {
 	Delay                                       time.Duration
 }
 
-// SetBaseURL sets base URL for API endpoint.
-func (app *Application) SetBaseURL(url string) {
+func (app *Application) setBaseURL(url string) {
 	if !strings.HasSuffix(url, "/") {
 		url += "/"
 	}

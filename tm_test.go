@@ -29,7 +29,7 @@ func TestGetTMs(t *testing.T) {
 	defer server.Close()
 
 	var app Application
-	app.SetBaseURL(server.URL)
+	app.setBaseURL(server.URL)
 
 	t.Log("Testing if TMs are properly read from the server.")
 	tms := app.GetTMs("")
