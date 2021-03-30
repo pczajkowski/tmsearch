@@ -30,7 +30,7 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 		if info.LanguageCode == "" || app.checkLanguage(info.LanguageCode) {
 			searchResults = app.Search(app.GetTMs(info.LanguageCode), info.Phrase)
 			info.ResultsServed = searchResults.TotalResults
-			WriteLog(info)
+			writeLog(info)
 		} else {
 			errorPage.Execute(w, "Language not valid!")
 			return
@@ -56,7 +56,7 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 	if info.LanguageCode == "" || app.checkLanguage(info.LanguageCode) {
 		TMList = app.GetTMs(info.LanguageCode)
 		info.ResultsServed = len(TMList)
-		WriteLog(info)
+		writeLog(info)
 	} else {
 		errorPage.Execute(w, "Language not valid!")
 		return
