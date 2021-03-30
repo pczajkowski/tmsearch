@@ -114,7 +114,7 @@ func (app *Application) Search(TMs []TM, text string) SearchResults {
 		}
 
 		var tempResults ResultsFromServer
-		JSONDecoder(resp.Body, &tempResults)
+		jsonDecoder(resp.Body, &tempResults)
 
 		if tempResults.TotalConcResult > 0 {
 			tmResults := getCleanedResults(tempResults, tm.FriendlyName)

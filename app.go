@@ -24,13 +24,12 @@ func (app *Application) setBaseURL(url string) {
 	app.BaseURL = url
 }
 
-// JSONDecoder decodes json to given interface, borrowed from SO.
-func JSONDecoder(data io.ReadCloser, target interface{}) {
+func jsonDecoder(data io.ReadCloser, target interface{}) {
 	decoder := json.NewDecoder(data)
 
 	err := decoder.Decode(target)
 	if err != nil {
-		log.Printf("Error reading json: %v", err)
+		log.Printf("Error reading json: %s", err)
 	}
 }
 
@@ -43,7 +42,7 @@ func (app *Application) LoadLanguages() {
 	defer data.Close()
 
 	app.Languages = make(map[string]string)
-	JSONDecoder(data, &app.Languages)
+	jsonDecoder(data, &app.Languages)
 }
 
 func (app Application) checkLanguage(language string) bool {
@@ -69,7 +68,7 @@ func (app *Application) Login() {
 	}
 	defer resp.Body.Close()
 
-	JSONDecoder(resp.Body, &app)
+	jsonDecoder(resp.Body, &app)
 
 	app.AuthString = "?authToken=" + app.AccessToken
 	log.Println(app.AuthString, resp.Status)

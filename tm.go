@@ -41,7 +41,7 @@ func (app *Application) GetTMs(language string) []TM {
 	}
 
 	var results []TM
-	JSONDecoder(resp.Body, &results)
+	jsonDecoder(resp.Body, &results)
 
 	return results
 }
