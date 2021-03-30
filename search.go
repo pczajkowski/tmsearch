@@ -49,10 +49,10 @@ type ResultsFromServer struct {
 
 func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) CleanedResults {
 	var tmResults CleanedResults
-	//64 is maximum returned by server
+	maxReturnedBySever := 64
 	var numberOfSegments int
-	if tempResults.TotalConcResult > 64 {
-		numberOfSegments = 64
+	if tempResults.TotalConcResult > maxReturnedBySever {
+		numberOfSegments = maxReturnedBySever
 	} else {
 		numberOfSegments = tempResults.TotalConcResult
 	}
