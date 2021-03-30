@@ -87,7 +87,40 @@ func getSearchJSON(text string) []byte {
 	return queryJSON
 }
 
-func (app *Application) search(TMs []TM, text string) SearchResults {
+func (app Application) getResultsFromTM(tmURL string, tm TM, searchJSON []byte) (retry bool, result ResultsFromServer) {
+	getTM := tmURL + tm.TMGuid
+	concordanceURL := getTM + "/concordance"
+	requestURL := concordanceURL + app.AuthString
+
+	var tempResults ResultsFromServer
+	resp, err := postQuery(requestURL, searchJSON)
+	if err != nil {
+		log.Println(err)
+		return false, tempResults
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusUnauthorized {
+		time.Sleep(app.Delay)
+
+		status, err := app.login()
+		if !status || err != nil {
+			log.Printf("Couldn't log in: %s", err)
+			return false, tempResults
+		}
+
+		return true, tempResults
+	}
+
+	err = jsonDecoder(resp.Body, &tempResults)
+	if err != nil {
+		log.Printf("Error decoding results: %s", err)
+	}
+
+	return false, tempResults
+}
+
+func (app Application) search(TMs []TM, text string) SearchResults {
 	var finalResults SearchResults
 	finalResults.SearchPhrase = text
 
@@ -98,41 +131,18 @@ func (app *Application) search(TMs []TM, text string) SearchResults {
 
 	tmURL := app.BaseURL + "tms/"
 	for _, tm := range TMs {
-		getTM := tmURL + tm.TMGuid
-		concordanceURL := getTM + "/concordance"
-		requestURL := concordanceURL + app.AuthString
-
-		resp, err := postQuery(requestURL, searchJSON)
-		if err != nil {
-			log.Println(err)
-			return finalResults
-		}
-		defer resp.Body.Close()
-
-		if resp.StatusCode == http.StatusUnauthorized {
-			time.Sleep(app.Delay)
-
-			status, err := app.login()
-			if !status || err != nil {
-				log.Printf("Couldn't log in: %s", err)
-				return finalResults
-			}
-
-			return app.search(TMs, text)
+		retry, tempResults := app.getResultsFromTM(tmURL, tm, searchJSON)
+		if retry {
+			_, tempResults = app.getResultsFromTM(tmURL, tm, searchJSON)
 		}
 
-		var tempResults ResultsFromServer
-		err = jsonDecoder(resp.Body, &tempResults)
-		if err != nil {
-			log.Printf("Error decoding results: %s", err)
+		if tempResults.TotalConcResult <= 0 {
 			continue
 		}
 
-		if tempResults.TotalConcResult > 0 {
-			tmResults := getCleanedResults(tempResults, tm.FriendlyName)
-			finalResults.Results = append(finalResults.Results, tmResults)
-			finalResults.TotalResults += len(tmResults.Segments)
-		}
+		tmResults := getCleanedResults(tempResults, tm.FriendlyName)
+		finalResults.Results = append(finalResults.Results, tmResults)
+		finalResults.TotalResults += len(tmResults.Segments)
 	}
 
 	return finalResults
