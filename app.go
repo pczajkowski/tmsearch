@@ -25,13 +25,9 @@ func (app *Application) setBaseURL(url string) {
 	app.BaseURL = url
 }
 
-func jsonDecoder(data io.ReadCloser, target interface{}) {
+func jsonDecoder(data io.ReadCloser, target interface{}) error {
 	decoder := json.NewDecoder(data)
-
-	err := decoder.Decode(target)
-	if err != nil {
-		log.Printf("Error reading json: %s", err)
-	}
+	return decoder.Decode(target)
 }
 
 func (app *Application) loadLanguages() {

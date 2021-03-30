@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"net/http"
 	"regexp"
 	"time"
 )
@@ -121,7 +122,11 @@ func (app *Application) search(TMs []TM, text string) SearchResults {
 		}
 
 		var tempResults ResultsFromServer
-		jsonDecoder(resp.Body, &tempResults)
+		err = jsonDecoder(resp.Body, &tempResults)
+		if err != nil {
+			log.Printf("Error decoding results: %s", err)
+			continue
+		}
 
 		if tempResults.TotalConcResult > 0 {
 			tmResults := getCleanedResults(tempResults, tm.FriendlyName)
