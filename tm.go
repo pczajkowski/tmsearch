@@ -34,18 +34,20 @@ func (app *Application) GetTMs(language string) []TM {
 
 	resp := GetQuery(queryURL)
 	defer resp.Body.Close()
+
+	var results []TM
 	if resp.StatusCode == 401 {
 		time.Sleep(app.Delay)
 
 		status, err := app.login()
 		if !status || err != nil {
-			log.Fatalf("Couldn't log in: %s", err)
+			log.Printf("Couldn't log in: %s", err)
+			return results
 		}
 
 		return app.GetTMs(language)
 	}
 
-	var results []TM
 	jsonDecoder(resp.Body, &results)
 
 	return results

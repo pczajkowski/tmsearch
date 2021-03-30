@@ -112,7 +112,8 @@ func (app *Application) Search(TMs []TM, text string) SearchResults {
 
 			status, err := app.login()
 			if !status || err != nil {
-				log.Fatalf("Couldn't log in: %s", err)
+				log.Printf("Couldn't log in: %s", err)
+				return finalResults
 			}
 
 			return app.Search(TMs, text)
