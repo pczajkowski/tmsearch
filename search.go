@@ -79,7 +79,7 @@ func getSearchJSON(text string) []byte {
 
 	queryJSON, err := json.Marshal(query)
 	if err != nil {
-		log.Printf("Error marshalling query: %v", err)
+		log.Printf("Error marshalling query: %s", err)
 		return []byte{}
 	}
 
@@ -87,13 +87,15 @@ func getSearchJSON(text string) []byte {
 }
 
 func (app *Application) search(TMs []TM, text string) SearchResults {
-	searchJSON := getSearchJSON(text)
-
-	tmURL := app.BaseURL + "tms/"
-
 	var finalResults SearchResults
 	finalResults.SearchPhrase = text
 
+	searchJSON := getSearchJSON(text)
+	if len(searchJSON) == 0 {
+		return finalResults
+	}
+
+	tmURL := app.BaseURL + "tms/"
 	for _, tm := range TMs {
 		getTM := tmURL + tm.TMGuid
 		concordanceURL := getTM + "/concordance"
