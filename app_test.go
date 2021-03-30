@@ -20,7 +20,7 @@ func TestSetBaseURL(t *testing.T) {
 
 func TestLoadLanguages(t *testing.T) {
 	var app Application
-	app.LoadLanguages()
+	app.loadLanguages()
 
 	testLanguageCode := "dan"
 	testLanguage := "Danish"

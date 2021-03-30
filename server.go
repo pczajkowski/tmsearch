@@ -78,7 +78,7 @@ func main() {
 	}
 
 	app.Login()
-	app.LoadLanguages()
+	app.loadLanguages()
 	app.Delay = time.Duration(20 * time.Second)
 
 	hostname := *host + ":" + *port
