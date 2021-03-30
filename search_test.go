@@ -61,7 +61,7 @@ func TestSearch(t *testing.T) {
 	testSourceSegment2 := "<bpt i='1' type='bold'>{}</bpt>Another Test/ Anything<ept i='1'>{}</ept>"
 
 	t.Log("Testing search method.")
-	searchResults := app.Search(tms, "something")
+	searchResults := app.search(tms, "something")
 	if searchResults.TotalResults != 4 {
 		t.Fatalf("Not all results returned! (%v)", searchResults.TotalResults)
 	}

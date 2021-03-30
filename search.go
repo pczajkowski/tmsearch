@@ -86,8 +86,7 @@ func getSearchJSON(text string) []byte {
 	return queryJSON
 }
 
-// Search for given phrase in given TMs.
-func (app *Application) Search(TMs []TM, text string) SearchResults {
+func (app *Application) search(TMs []TM, text string) SearchResults {
 	searchJSON := getSearchJSON(text)
 
 	tmURL := app.BaseURL + "tms/"
@@ -116,7 +115,7 @@ func (app *Application) Search(TMs []TM, text string) SearchResults {
 				return finalResults
 			}
 
-			return app.Search(TMs, text)
+			return app.search(TMs, text)
 		}
 
 		var tempResults ResultsFromServer
