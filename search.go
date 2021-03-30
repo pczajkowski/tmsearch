@@ -50,13 +50,12 @@ type ResultsFromServer struct {
 func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) CleanedResults {
 	var tmResults CleanedResults
 	maxReturnedBySever := 64
-	var numberOfSegments int
-	if tempResults.TotalConcResult > maxReturnedBySever {
+
+	numberOfSegments := tempResults.TotalConcResult
+	if numberOfSegments > maxReturnedBySever {
 		numberOfSegments = maxReturnedBySever
-	} else {
-		numberOfSegments = tempResults.TotalConcResult
 	}
-	//Allocating Segments array beforehand
+
 	tmResults.Segments = make([]Segment, 0, numberOfSegments)
 	tmResults.TMName = TMFriendlyName
 
