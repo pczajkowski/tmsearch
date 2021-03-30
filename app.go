@@ -49,8 +49,7 @@ func (app Application) checkLanguage(language string) bool {
 	return ok
 }
 
-// Login logs into the API and sets AuthString.
-func (app *Application) Login() {
+func (app *Application) login() {
 	credentials, err := ioutil.ReadFile("./secrets.json")
 	if err != nil {
 		log.Fatalf("Error reading credentials: %v", err)

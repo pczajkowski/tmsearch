@@ -36,7 +36,7 @@ func (app *Application) GetTMs(language string) []TM {
 	defer resp.Body.Close()
 	if resp.StatusCode == 401 {
 		time.Sleep(app.Delay)
-		app.Login()
+		app.login()
 		return app.GetTMs(language)
 	}
 

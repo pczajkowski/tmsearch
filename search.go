@@ -109,7 +109,7 @@ func (app *Application) Search(TMs []TM, text string) SearchResults {
 
 		if resp.StatusCode == 401 {
 			time.Sleep(app.Delay)
-			app.Login()
+			app.login()
 			return app.Search(TMs, text)
 		}
 

@@ -77,7 +77,7 @@ func main() {
 		log.Fatalln("Can't do anything without URL to API")
 	}
 
-	app.Login()
+	app.login()
 	app.loadLanguages()
 	app.Delay = time.Duration(20 * time.Second)
 
