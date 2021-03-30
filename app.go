@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -49,25 +50,27 @@ func (app Application) checkLanguage(language string) bool {
 	return ok
 }
 
-func (app *Application) login() {
+func (app *Application) login() (bool, error) {
 	credentials, err := ioutil.ReadFile("./secrets.json")
 	if err != nil {
-		log.Fatalf("Error reading credentials: %s", err)
+		return false, fmt.Errorf("Error reading credentials: %s", err)
 	}
 
 	loginURL := app.BaseURL + "auth/login"
 
 	resp, err := postQuery(loginURL, credentials)
 	if err != nil {
-		log.Fatalf("Error logging in: %s", err)
-	}
-	if resp.StatusCode != 200 {
-		log.Fatalf("Error logging in: %s", resp.Status)
+		return false, fmt.Errorf("Error logging in: %s", err)
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		return false, fmt.Errorf("Error logging in: %s", resp.Status)
+	}
 
 	jsonDecoder(resp.Body, &app)
 
 	app.AuthString = "?authToken=" + app.AccessToken
 	log.Println(app.AuthString, resp.Status)
+	return true, nil
 }

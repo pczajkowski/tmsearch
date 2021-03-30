@@ -109,7 +109,12 @@ func (app *Application) Search(TMs []TM, text string) SearchResults {
 
 		if resp.StatusCode == 401 {
 			time.Sleep(app.Delay)
-			app.login()
+
+			status, err := app.login()
+			if !status || err != nil {
+				log.Fatalf("Couldn't log in: %s", err)
+			}
+
 			return app.Search(TMs, text)
 		}
 

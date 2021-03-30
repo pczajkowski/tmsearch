@@ -77,7 +77,11 @@ func main() {
 		log.Fatalln("Can't do anything without URL to API")
 	}
 
-	app.login()
+	status, err := app.login()
+	if !status || err != nil {
+		log.Fatalf("Couldn't log in: %s", err)
+	}
+
 	app.loadLanguages()
 	app.Delay = time.Duration(20 * time.Second)
 
