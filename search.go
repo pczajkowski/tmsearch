@@ -56,14 +56,16 @@ func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) Cle
 		numberOfSegments = maxReturnedBySever
 	}
 
-	tmResults.Segments = make([]Segment, 0, numberOfSegments)
+	tmResults.Segments = make([]Segment, numberOfSegments)
 	tmResults.TMName = TMFriendlyName
 
-	for _, result := range tempResults.ConcResult {
+	for index := 0; index < numberOfSegments; index++ {
+		result := tempResults.ConcResult[index]
 		segment := Segment{result.TMEntry.SourceSegment, result.TMEntry.TargetSegment}
 		segment.clean()
-		tmResults.Segments = append(tmResults.Segments, segment)
+		tmResults.Segments[index] = segment
 	}
+
 	return tmResults
 }
 
