@@ -52,17 +52,17 @@ func (app Application) checkLanguage(language string) bool {
 func (app *Application) login() {
 	credentials, err := ioutil.ReadFile("./secrets.json")
 	if err != nil {
-		log.Fatalf("Error reading credentials: %v", err)
+		log.Fatalf("Error reading credentials: %s", err)
 	}
 
 	loginURL := app.BaseURL + "auth/login"
 
 	resp, err := postQuery(loginURL, credentials)
 	if err != nil {
-		log.Fatalf("Error logging in: %v", err)
+		log.Fatalf("Error logging in: %s", err)
 	}
 	if resp.StatusCode != 200 {
-		log.Fatalf("Error logging in: %v", resp.Status)
+		log.Fatalf("Error logging in: %s", resp.Status)
 	}
 	defer resp.Body.Close()
 
