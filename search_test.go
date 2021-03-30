@@ -20,11 +20,8 @@ func TestSegmentCleanup(t *testing.T) {
 	segment := Segment{sourceSegment, targetSegment}
 	segment.clean()
 
-	t.Log("Testing if <seg> tags will be removed from segments.")
-	if segment.Source == cleanedSourceSegment && segment.Target == cleanedTargetSegment {
-		t.Log("Segments have been cleaned!")
-	} else {
-		t.Fatalf("Segments still have tags!\nSource: %v\nTarget: %v", segment.Source, segment.Target)
+	if segment.Source != cleanedSourceSegment || segment.Target != cleanedTargetSegment {
+		t.Fatalf("Segments still have tags!\nSource: %s\nTarget: %s", segment.Source, segment.Target)
 	}
 }
 
