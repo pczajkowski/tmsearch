@@ -108,7 +108,7 @@ func (app *Application) search(TMs []TM, text string) SearchResults {
 		}
 		defer resp.Body.Close()
 
-		if resp.StatusCode == 401 {
+		if resp.StatusCode == http.StatusUnauthorized {
 			time.Sleep(app.Delay)
 
 			status, err := app.login()
