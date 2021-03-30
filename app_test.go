@@ -75,3 +75,15 @@ func TestLoginBadURL(t *testing.T) {
 		t.Fatalf("Status: %v, error: %s", status, err)
 	}
 }
+
+func TestLoginWrongStatus(t *testing.T) {
+	server := fakeServer(http.StatusBadRequest, "")
+	defer server.Close()
+
+	var app Application
+	app.setBaseURL(server.URL)
+	status, err := app.login()
+	if status || err == nil {
+		t.Fatalf("Status: %v, error: %s", status, err)
+	}
+}
