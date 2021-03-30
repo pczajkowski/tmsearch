@@ -12,8 +12,7 @@ type Segment struct {
 	Source, Target string
 }
 
-// Clean cleans <seg> tags from source and translated texts.
-func (s *Segment) Clean() {
+func (s *Segment) clean() {
 	re := regexp.MustCompile("</?seg>")
 	s.Source = re.ReplaceAllString(s.Source, "")
 	s.Target = re.ReplaceAllString(s.Target, "")
@@ -63,7 +62,7 @@ func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) Cle
 
 	for _, result := range tempResults.ConcResult {
 		segment := Segment{result.TMEntry.SourceSegment, result.TMEntry.TargetSegment}
-		segment.Clean()
+		segment.clean()
 		tmResults.Segments = append(tmResults.Segments, segment)
 	}
 	return tmResults
