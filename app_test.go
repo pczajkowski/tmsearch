@@ -65,3 +65,13 @@ func TestLogin(t *testing.T) {
 		t.Fatalf("Status: %v, error: %s", status, err)
 	}
 }
+
+func TestLoginBadURL(t *testing.T) {
+	var app Application
+	app.setBaseURL("badURL")
+
+	status, err := app.login()
+	if status || err == nil {
+		t.Fatalf("Status: %v, error: %s", status, err)
+	}
+}
