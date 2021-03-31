@@ -28,7 +28,7 @@ func TestSegmentCleanup(t *testing.T) {
 func serveSearchResults() *httptest.Server {
 	searchResults, err := ioutil.ReadFile("./testFiles/searchResults.json")
 	if err != nil {
-		log.Fatalf("Error reading file: %s\n", err)
+		log.Fatalf("Error reading file: %s", err)
 	}
 
 	f := func(w http.ResponseWriter, r *http.Request) {

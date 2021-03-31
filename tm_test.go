@@ -3,20 +3,19 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 )
 
-func ServeTMs() *httptest.Server {
+func serveTMs() *httptest.Server {
 	tms, err := ioutil.ReadFile("./testFiles/tms.json")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error reading file: %v\n", err)
+		log.Fatalf("Error reading file: %s", err)
 	}
 
 	f := func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(200)
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintln(w, string(tms))
 	}
@@ -25,19 +24,18 @@ func ServeTMs() *httptest.Server {
 }
 
 func TestGetTMs(t *testing.T) {
-	server := ServeTMs()
+	server := serveTMs()
 	defer server.Close()
 
 	var app Application
 	app.setBaseURL(server.URL)
 
-	t.Log("Testing if TMs are properly read from the server.")
 	tms := app.getTMs("")
 	if len(tms) != 2 {
-		t.Fatalf("Not all TMs read! (%v)", len(tms))
-	} else if tms[0].FriendlyName == "Test TM 1" || tms[0].FriendlyName == "Test TM 2" {
-		t.Log("TMs properly read!")
-	} else {
+		t.Fatalf("Not all TMs read! (%d)", len(tms))
+	}
+
+	if tms[0].FriendlyName != "Test TM 1" || tms[1].FriendlyName != "Test TM 2" {
 		t.Fatalf("Something went wrong while reading TMs!\n%v", tms)
 	}
 }

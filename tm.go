@@ -23,18 +23,16 @@ func getQuery(url string) *http.Response {
 
 func (app *Application) getTMs(language string) []TM {
 	tmURL := app.BaseURL + "tms/"
-	var queryURL string
-	if language == "" {
-		queryURL = tmURL + app.AuthString
-	} else {
-		queryURL = tmURL + app.AuthString + "&targetLang=" + language
+	queryURL := tmURL + app.AuthString
+	if language != "" {
+		queryURL += "&targetLang=" + language
 	}
 
 	resp := getQuery(queryURL)
 	defer resp.Body.Close()
 
 	var results []TM
-	if resp.StatusCode == 401 {
+	if resp.StatusCode == http.StatusBadRequest {
 		time.Sleep(app.Delay)
 
 		status, err := app.login()
@@ -46,7 +44,10 @@ func (app *Application) getTMs(language string) []TM {
 		return app.getTMs(language)
 	}
 
-	jsonDecoder(resp.Body, &results)
+	err := jsonDecoder(resp.Body, &results)
+	if err != nil {
+		log.Printf("Error decoding results: %s", err)
+	}
 
 	return results
 }
