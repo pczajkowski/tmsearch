@@ -33,7 +33,9 @@ func TestSetBaseURL(t *testing.T) {
 
 func TestLoadLanguages(t *testing.T) {
 	var app Application
-	app.loadLanguages()
+	if !app.loadLanguages() {
+		t.Fatal("Couldn't load languages!")
+	}
 
 	testLanguageCode := "dan"
 	testLanguage := "Danish"

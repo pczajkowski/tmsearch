@@ -30,15 +30,22 @@ func jsonDecoder(data io.ReadCloser, target interface{}) error {
 	return decoder.Decode(target)
 }
 
-func (app *Application) loadLanguages() {
+func (app *Application) loadLanguages() bool {
 	data, err := os.Open("./html/languages.json")
 	if err != nil {
-		log.Fatalf("Error reading languages: %s", err)
+		log.Printf("Error reading languages: %s", err)
+		return false
 	}
 	defer data.Close()
 
 	app.Languages = make(map[string]string)
-	jsonDecoder(data, &app.Languages)
+	err = jsonDecoder(data, &app.Languages)
+	if err != nil {
+		log.Printf("Error decoding languages: %s", err)
+		return false
+	}
+
+	return true
 }
 
 func (app Application) checkLanguage(language string) bool {

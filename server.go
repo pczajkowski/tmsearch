@@ -81,7 +81,9 @@ func main() {
 		log.Fatalf("Couldn't log in: %s", err)
 	}
 
-	app.loadLanguages()
+	if !app.loadLanguages() {
+		log.Fatal("Couldn't load languages!")
+	}
 	app.Delay = time.Duration(20 * time.Second)
 
 	hostname := *host + ":" + *port
