@@ -50,22 +50,22 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.GetInfoFromRequest(r)
 
-	var TMList []TM
-	if info.LanguageCode == "" || app.checkLanguage(info.LanguageCode) {
-		TMList = app.GetTMs(info.LanguageCode)
-		info.ResultsServed = len(TMList)
-		writeLog(info)
-	} else {
+	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
 		errorPage.Execute(w, "Language not valid!")
 		return
 	}
 
-	if len(TMList) > 0 {
-		t := template.Must(template.New("tms.html").ParseFiles("./html/tms.html"))
-		t.Execute(w, TMList)
-	} else {
+	TMList := app.GetTMs(info.LanguageCode)
+	info.ResultsServed = len(TMList)
+	writeLog(info)
+
+	if info.ResultsServed == 0 {
 		errorPage.Execute(w, "No TMs to display!")
+		return
 	}
+
+	t := template.Must(template.New("tms.html").ParseFiles("./html/tms.html"))
+	t.Execute(w, TMList)
 }
 
 func main() {
