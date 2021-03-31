@@ -32,7 +32,7 @@ func TestGetTMs(t *testing.T) {
 	app.setBaseURL(server.URL)
 
 	t.Log("Testing if TMs are properly read from the server.")
-	tms := app.GetTMs("")
+	tms := app.getTMs("")
 	if len(tms) != 2 {
 		t.Fatalf("Not all TMs read! (%v)", len(tms))
 	} else if tms[0].FriendlyName == "Test TM 1" || tms[0].FriendlyName == "Test TM 2" {

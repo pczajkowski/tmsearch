@@ -21,8 +21,7 @@ func getQuery(url string) *http.Response {
 	return resp
 }
 
-// GetTMs returns list of TMs for given target language.
-func (app *Application) GetTMs(language string) []TM {
+func (app *Application) getTMs(language string) []TM {
 	tmURL := app.BaseURL + "tms/"
 	var queryURL string
 	if language == "" {
@@ -44,7 +43,7 @@ func (app *Application) GetTMs(language string) []TM {
 			return results
 		}
 
-		return app.GetTMs(language)
+		return app.getTMs(language)
 	}
 
 	jsonDecoder(resp.Body, &results)

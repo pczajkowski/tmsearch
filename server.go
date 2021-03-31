@@ -33,7 +33,7 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	searchResults := app.search(app.GetTMs(info.LanguageCode), info.Phrase)
+	searchResults := app.search(app.getTMs(info.LanguageCode), info.Phrase)
 	info.ResultsServed = searchResults.TotalResults
 	writeLog(info)
 
@@ -55,7 +55,7 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	TMList := app.GetTMs(info.LanguageCode)
+	TMList := app.getTMs(info.LanguageCode)
 	info.ResultsServed = len(TMList)
 	writeLog(info)
 
