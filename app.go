@@ -36,7 +36,12 @@ func (app *Application) loadLanguages() bool {
 		log.Printf("Error reading languages: %s", err)
 		return false
 	}
-	defer data.Close()
+
+	defer func() {
+		if err := data.Close(); err != nil {
+			log.Printf("Error closing file: %s", err)
+		}
+	}()
 
 	app.Languages = make(map[string]string)
 	err = jsonDecoder(data, &app.Languages)
