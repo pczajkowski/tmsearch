@@ -14,13 +14,11 @@ var url = flag.String("b", "", "API URL")
 var app Application
 var errorPage = template.Must(template.ParseFiles("./html/error.html"))
 
-// ServeIndex serves index page.
 func serveIndex(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("./html/index.html"))
 	t.Execute(w, app.Languages)
 }
 
-// DisplaySearchResults displays search results as HTML page.
 func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.GetInfoFromRequest(r)
@@ -47,7 +45,6 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// DisplayTMs displays TMs as HTML page.
 func displayTMs(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.GetInfoFromRequest(r)
@@ -72,10 +69,11 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	flag.Parse()
-	app.setBaseURL(*url)
-	if app.BaseURL == "" {
+	if *url == "" {
 		log.Fatalln("Can't do anything without URL to API")
 	}
+
+	app.setBaseURL(*url)
 
 	status, err := app.login()
 	if !status || err != nil {
