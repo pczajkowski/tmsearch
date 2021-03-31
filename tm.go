@@ -12,11 +12,10 @@ type TM struct {
 	Client, Domain, FriendlyName, Project, SourceLangCode, Subject, TMGuid, TMOwner, TargetLangCode string
 }
 
-// GetQuery sends GET query and returns response.
-func GetQuery(url string) *http.Response {
+func getQuery(url string) *http.Response {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Printf("Error getting query: %v", err)
+		log.Printf("Error getting query: %s", err)
 	}
 
 	return resp
@@ -32,7 +31,7 @@ func (app *Application) GetTMs(language string) []TM {
 		queryURL = tmURL + app.AuthString + "&targetLang=" + language
 	}
 
-	resp := GetQuery(queryURL)
+	resp := getQuery(queryURL)
 	defer resp.Body.Close()
 
 	var results []TM
