@@ -23,26 +23,27 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.GetInfoFromRequest(r)
 
-	if info.Phrase != "" {
-		var searchResults SearchResults
-		if info.LanguageCode == "" || app.checkLanguage(info.LanguageCode) {
-			searchResults = app.search(app.GetTMs(info.LanguageCode), info.Phrase)
-			info.ResultsServed = searchResults.TotalResults
-			writeLog(info)
-		} else {
-			errorPage.Execute(w, "Language not valid!")
-			return
-		}
-
-		if len(searchResults.Results) > 0 {
-			t := template.Must(template.New("results.html").ParseFiles("./html/results.html"))
-			t.Execute(w, searchResults)
-		} else {
-			errorPage.Execute(w, "Nothing found!")
-		}
-	} else {
+	if info.Phrase == "" {
 		errorPage.Execute(w, "You need to enter search phrase!")
+		return
 	}
+
+	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
+		errorPage.Execute(w, "Language not valid!")
+		return
+	}
+
+	searchResults := app.search(app.GetTMs(info.LanguageCode), info.Phrase)
+	info.ResultsServed = searchResults.TotalResults
+	writeLog(info)
+
+	if len(searchResults.Results) == 0 {
+		errorPage.Execute(w, "Nothing found!")
+		return
+	}
+
+	t := template.Must(template.New("results.html").ParseFiles("./html/results.html"))
+	t.Execute(w, searchResults)
 }
 
 func displayTMs(w http.ResponseWriter, r *http.Request) {
