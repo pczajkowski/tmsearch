@@ -53,7 +53,10 @@ func TestSearch(t *testing.T) {
 	defer tmsJSON.Close()
 
 	var tms []TM
-	jsonDecoder(tmsJSON, &tms)
+	err = jsonDecoder(tmsJSON, &tms)
+	if err != nil {
+		t.Fatalf("Error decoding tms: %s", err)
+	}
 
 	searchResults := app.search(tms, "something")
 	if searchResults.TotalResults != 4 {

@@ -71,7 +71,10 @@ func (app *Application) login() (bool, error) {
 		return false, fmt.Errorf("Error logging in: %s", resp.Status)
 	}
 
-	jsonDecoder(resp.Body, &app)
+	err = jsonDecoder(resp.Body, &app)
+	if err != nil {
+		return false, fmt.Errorf("Error decoding login details: %s", err)
+	}
 
 	app.AuthString = "?authToken=" + app.AccessToken
 	log.Println(app.AuthString, resp.Status)
