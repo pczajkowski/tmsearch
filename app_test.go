@@ -48,6 +48,10 @@ func TestLoadLanguages(t *testing.T) {
 	if fromMap != testLanguage {
 		t.Fatalf("Value of key '%s' isn't '%s'", testLanguageCode, testLanguage)
 	}
+
+	if !app.checkLanguage(testLanguageCode) {
+		t.Fatalf("checkLanguage returned false for %s", testLanguageCode)
+	}
 }
 
 func TestLogin(t *testing.T) {
