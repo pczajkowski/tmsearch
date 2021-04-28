@@ -39,3 +39,16 @@ func TestGetTMs(t *testing.T) {
 		t.Fatalf("Something went wrong while reading TMs!\n%v", tms)
 	}
 }
+
+func TestGetTMsWrongStatus(t *testing.T) {
+	server := fakeServer(http.StatusBadRequest, "")
+	defer server.Close()
+
+	var app Application
+	app.setBaseURL(server.URL)
+
+	tms := app.getTMs("")
+	if len(tms) != 0 {
+		t.Fatal("There should be no TMs!")
+	}
+}

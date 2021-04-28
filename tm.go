@@ -44,6 +44,11 @@ func (app *Application) getTMs(language string) []TM {
 		return app.getTMs(language)
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		log.Printf("Problem getting TMs (%s)!", resp.Status)
+		return results
+	}
+
 	err := jsonDecoder(resp.Body, &results)
 	if err != nil {
 		log.Printf("Error decoding TM results: %s", err)
