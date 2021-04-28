@@ -33,7 +33,13 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	searchResults := app.search(app.getTMs(info.LanguageCode), info.Phrase)
+	tms := app.getTMs(info.LanguageCode)
+	if len(tms) == 0 {
+		errorPage.Execute(w, "Couldn't get TMs!")
+		return
+	}
+
+	searchResults := app.search(tms, info.Phrase)
 	info.ResultsServed = searchResults.TotalResults
 	writeLog(info)
 
