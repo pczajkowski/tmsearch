@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -72,7 +73,7 @@ func (app *Application) login() (bool, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		return false, fmt.Errorf("Error logging in: %s", resp.Status)
 	}
 
