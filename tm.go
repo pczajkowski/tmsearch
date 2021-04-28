@@ -32,7 +32,7 @@ func (app *Application) getTMs(language string) []TM {
 	defer resp.Body.Close()
 
 	var results []TM
-	if resp.StatusCode == http.StatusBadRequest {
+	if resp.StatusCode == http.StatusUnauthorized {
 		time.Sleep(app.Delay)
 
 		status, err := app.login()
@@ -46,7 +46,7 @@ func (app *Application) getTMs(language string) []TM {
 
 	err := jsonDecoder(resp.Body, &results)
 	if err != nil {
-		log.Printf("Error decoding results: %s", err)
+		log.Printf("Error decoding TM results: %s", err)
 	}
 
 	return results

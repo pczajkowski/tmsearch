@@ -83,7 +83,7 @@ func TestLoginBadURL(t *testing.T) {
 }
 
 func TestLoginWrongStatus(t *testing.T) {
-	server := fakeServer(http.StatusBadRequest, "")
+	server := fakeServer(http.StatusUnauthorized, "")
 	defer server.Close()
 
 	var app Application
