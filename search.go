@@ -112,6 +112,11 @@ func (app Application) getResultsFromTM(tmURL string, tm TM, searchJSON []byte) 
 		return true, tempResults
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		log.Printf("Problem getting results (%s)!", resp.Status)
+		return false, tempResults
+	}
+
 	err = jsonDecoder(resp.Body, &tempResults)
 	if err != nil {
 		log.Printf("Error decoding results: %s", err)

@@ -73,3 +73,28 @@ func TestSearch(t *testing.T) {
 		}
 	}
 }
+
+func TestSearchWrongStatus(t *testing.T) {
+	server := fakeServer(http.StatusBadRequest, "")
+	defer server.Close()
+
+	var app Application
+	app.setBaseURL(server.URL)
+
+	tmsJSON, err := os.Open("./testFiles/tms.json")
+	if err != nil {
+		t.Fatalf("Error reading tms: %s", err)
+	}
+	defer tmsJSON.Close()
+
+	var tms []TM
+	err = jsonDecoder(tmsJSON, &tms)
+	if err != nil {
+		t.Fatalf("Error decoding tms: %s", err)
+	}
+
+	searchResults := app.search(tms, "something")
+	if searchResults.TotalResults != 0 {
+		t.Fatal("There should be no results!")
+	}
+}
