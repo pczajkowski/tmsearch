@@ -12,12 +12,20 @@ builds:
       - windows
       - darwin
 archives:
-  - replacements:
+  -
+    replacements:
       darwin: Darwin
       linux: Linux
       windows: Windows
       386: i386
       amd64: x86_64
+    files:
+    - src: 'html/*'
+      dst: html
+      strip_parent: true
+    - src: 'static/*'
+      dst: static
+      strip_parent: true
 checksum:
   name_template: 'checksums.txt'
 snapshot:
