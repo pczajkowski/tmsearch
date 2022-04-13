@@ -65,11 +65,11 @@ func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) Cle
 	return tmResults
 }
 
-func getSearchJSON(text string) []byte {
+func getSearchJSON(info SearchInfo) []byte {
 	query := searchQuery{}
-	query.SearchExpression = append(query.SearchExpression, text)
+	query.SearchExpression = append(query.SearchExpression, info.Phrase)
 	query.Options.CaseSensitive = false
-	query.Options.ReverseLookup = false
+	query.Options.ReverseLookup = info.Reverse
 	query.Options.ResultsLimit = 60
 
 	queryJSON, err := json.Marshal(query)
@@ -119,11 +119,11 @@ func (app Application) getResultsFromTM(tmURL string, tm TM, searchJSON []byte) 
 	return false, tempResults
 }
 
-func (app Application) search(TMs []TM, text string) SearchResults {
+func (app Application) search(TMs []TM, info SearchInfo) SearchResults {
 	var finalResults SearchResults
-	finalResults.SearchPhrase = text
+	finalResults.SearchPhrase = info.Phrase
 
-	searchJSON := getSearchJSON(text)
+	searchJSON := getSearchJSON(info)
 	if len(searchJSON) == 0 {
 		return finalResults
 	}

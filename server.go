@@ -39,7 +39,7 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	searchResults := app.search(tms, info.Phrase)
+	searchResults := app.search(tms, info)
 	info.ResultsServed = searchResults.TotalResults
 	writeLog(info)
 

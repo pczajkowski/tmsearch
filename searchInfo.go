@@ -15,6 +15,7 @@ const (
 type SearchInfo struct {
 	Date time.Time
 	Host, Phrase, Language, LanguageCode string
+	Reverse bool
 	ResultsServed int
 }
 
@@ -29,6 +30,10 @@ func (s *SearchInfo) GetInfoFromRequest(r *http.Request) {
 	s.Phrase = r.URL.Query().Get("phrase")
 	if s.Phrase == "" {
 		s.Phrase = "TMS"
+	}
+
+	if r.URL.Query().Get("reverse") == "true" {
+		s.Reverse = true
 	}
 
 	s.LanguageCode = r.URL.Query().Get("lang")
