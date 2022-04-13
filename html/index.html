@@ -18,12 +18,12 @@
                 </tr>
                 <tr>
                     <td>
-                        Text:
-                        <input type="text" name="phrase">
+                        <label for="phrase">Text:</label>
+                        <input type="text" id="phrase" name="phrase">
                         <br/>
                         <br/>
-                        Language:
-                        <select name="lang">
+                        <label for="lang">Language:</label>
+                        <select id="lang" name="lang">
                             <option value="">All</option>
                             {{range $key, $value := .}}
                             <option value="{{$key}}">{{$value}}</option>
@@ -31,7 +31,7 @@
                         </select>
                     </td>
                     <td>
-                        Search in target?
+                        <label for="reverse">Search in target?</label>
                         <input type="checkbox" id="reverse" name="reverse" value="true">
                     </td>
                 </tr>
