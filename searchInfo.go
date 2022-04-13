@@ -28,9 +28,6 @@ func (s *SearchInfo) GetInfoFromRequest(r *http.Request) {
 	s.Host, _, _ = net.SplitHostPort(r.RemoteAddr)
 
 	s.Phrase = r.URL.Query().Get("phrase")
-	if s.Phrase == "" {
-		s.Phrase = "TMS"
-	}
 
 	if r.URL.Query().Get("reverse") == "true" {
 		s.Reverse = true
