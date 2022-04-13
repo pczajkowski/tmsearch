@@ -50,12 +50,7 @@ type ResultsFromServer struct {
 
 func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) CleanedResults {
 	var tmResults CleanedResults
-	maxReturnedBySever := 64
-
-	numberOfSegments := tempResults.TotalConcResult
-	if numberOfSegments > maxReturnedBySever {
-		numberOfSegments = maxReturnedBySever
-	}
+	var numberOfSegments = len(tempResults.ConcResult)
 
 	tmResults.Segments = make([]Segment, numberOfSegments)
 	tmResults.TMName = TMFriendlyName
@@ -70,13 +65,12 @@ func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) Cle
 	return tmResults
 }
 
-type searchQuery struct {
-	SearchExpression []string
-}
-
 func getSearchJSON(text string) []byte {
 	query := searchQuery{}
 	query.SearchExpression = append(query.SearchExpression, text)
+	query.Options.CaseSensitive = false
+	query.Options.ReverseLookup = false
+	query.Options.ResultsLimit = 60
 
 	queryJSON, err := json.Marshal(query)
 	if err != nil {
