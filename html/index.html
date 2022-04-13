@@ -2,20 +2,41 @@
 <html>
     <head>
         <title>memoQ TM Search</title>
+        <style>
+            table, th, td {
+              border: 1px solid black;
+              border-collapse: collapse;
+            }
+        </style>
     </head>
     <body>
         <form action="/q">
-            <p>Text:</p>
-            <input type="text" name="phrase">
-            <p>Search in target?</p>
-            <input type="checkbox" id="reverse" name="reverse" value="true">
-            <p>Language:</p>
-            <select name="lang">
-                <option value="">All</option>
-                {{range $key, $value := .}}
-                <option value="{{$key}}">{{$value}}</option>
-                {{end}}
-            </select>
+            <table>
+                <tr>
+                    <th>Search</th>
+                    <th>Options</th>
+                </tr>
+                <tr>
+                    <td>
+                        Text:
+                        <input type="text" name="phrase">
+                        <br/>
+                        <br/>
+                        Language:
+                        <select name="lang">
+                            <option value="">All</option>
+                            {{range $key, $value := .}}
+                            <option value="{{$key}}">{{$value}}</option>
+                            {{end}}
+                        </select>
+                    </td>
+                    <td>
+                        Search in target?
+                        <input type="checkbox" id="reverse" name="reverse" value="true">
+                    </td>
+                </tr>
+            </table>
+            <br/>
             <input type="submit" value="Search">
         </form>
     </body>
