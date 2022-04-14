@@ -54,7 +54,7 @@ func getSearchJSON(info SearchInfo) []byte {
 	query.SearchExpression = append(query.SearchExpression, info.Phrase)
 	query.Options.CaseSensitive = false
 	query.Options.ReverseLookup = info.Reverse
-	query.Options.ResultsLimit = 60
+	query.Options.ResultsLimit = info.SearchLimit
 
 	queryJSON, err := json.Marshal(query)
 	if err != nil {

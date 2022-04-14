@@ -16,7 +16,7 @@ type SearchInfo struct {
 	Date time.Time
 	Host, Phrase, Language, LanguageCode string
 	Reverse bool
-	ResultsServed int
+	ResultsServed, SearchLimit int
 }
 
 func (s *SearchInfo) ToArray() []string {
@@ -31,6 +31,13 @@ func (s *SearchInfo) GetInfoFromRequest(r *http.Request) {
 
 	if r.URL.Query().Get("reverse") == "true" {
 		s.Reverse = true
+	}
+
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil {
+		s.SearchLimit = 64
+	} else {
+		s.SearchLimit = limit
 	}
 
 	s.LanguageCode = r.URL.Query().Get("lang")
