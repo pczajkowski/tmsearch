@@ -32,22 +32,6 @@ type SearchResults struct {
 	TotalResults int
 }
 
-// ResultsFromServer stores results as received from server.
-type ResultsFromServer struct {
-	ConcResult []struct {
-		ConcordanceTextRanges []struct {
-			Length, Start int
-		}
-		ConcordanceTranslationRanges []string
-		Length, StartPos             int
-		TMEntry                      struct {
-			SourceSegment, TargetSegment, DocumentName string
-		}
-	}
-	ConcTransResult, Errors []string
-	TotalConcResult         int
-}
-
 func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) CleanedResults {
 	var tmResults CleanedResults
 	var numberOfSegments = len(tempResults.ConcResult)
