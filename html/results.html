@@ -16,7 +16,7 @@
 	<body onload="app.sortTable()">
 		<div><a href="/"><b>Search again</b></a></div>
 		<br/>
-		<div>Filter: 
+		<div>Filter:
 			<input id="filter" type="text" name="name" placeholder="type phrase<ENTER>" onchange="app.filterTable(this.value)" autocomplete="off">
 			<button class="btn" onclick="app.clearFilter()">Clear filter</button>
 			<i>Click on column to sort</i>
@@ -26,6 +26,7 @@
 				<tr style='text-align: left'>
 					<th>Source</th>
 					<th>Translation</th>
+					<th>File</th>
 					<th>TM</th>
 				</tr>
 			</thead>
@@ -35,6 +36,7 @@
 				<tr style='text-align: left'>
 					<td>{{$segment.Source}}</td>
 					<td>{{$segment.Target}}</td>
+					<td>{{$segment.DocumentName}}</td>
 					<td>{{$result.TMName}}</td>
 				</tr>
 				{{end}}

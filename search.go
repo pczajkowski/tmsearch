@@ -10,7 +10,7 @@ import (
 
 // Segment stores source and translated texts.
 type Segment struct {
-	Source, Target string
+	Source, Target, DocumentName string
 }
 
 func (s *Segment) clean() {
@@ -41,7 +41,7 @@ type ResultsFromServer struct {
 		ConcordanceTranslationRanges []string
 		Length, StartPos             int
 		TMEntry                      struct {
-			SourceSegment, TargetSegment string
+			SourceSegment, TargetSegment, DocumentName string
 		}
 	}
 	ConcTransResult, Errors []string
@@ -57,7 +57,7 @@ func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) Cle
 
 	for index := 0; index < numberOfSegments; index++ {
 		result := tempResults.ConcResult[index]
-		segment := Segment{result.TMEntry.SourceSegment, result.TMEntry.TargetSegment}
+		segment := Segment{result.TMEntry.SourceSegment, result.TMEntry.TargetSegment, result.TMEntry.DocumentName}
 		segment.clean()
 		tmResults.Segments[index] = segment
 	}

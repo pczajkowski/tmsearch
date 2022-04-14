@@ -17,7 +17,7 @@ func TestSegmentCleanup(t *testing.T) {
 	cleanedSourceSegment := "This is test"
 	cleanedTargetSegment := "This is test for target"
 
-	segment := Segment{sourceSegment, targetSegment}
+	segment := Segment{sourceSegment, targetSegment, "test.txt"}
 	segment.clean()
 
 	if segment.Source != cleanedSourceSegment || segment.Target != cleanedTargetSegment {
