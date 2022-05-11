@@ -28,7 +28,7 @@ type CleanedResults struct {
 // SearchResults stores processed results from all TMs.
 type SearchResults struct {
 	SearchPhrase string
-	Results      []CleanedResults
+	Results      []*CleanedResults
 	TotalResults int
 }
 
@@ -124,7 +124,7 @@ func (app Application) search(TMs []TM, info SearchInfo) SearchResults {
 		}
 
 		tmResults := getCleanedResults(tempResults, tm.FriendlyName)
-		finalResults.Results = append(finalResults.Results, tmResults)
+		finalResults.Results = append(finalResults.Results, &tmResults)
 		finalResults.TotalResults += len(tmResults.Segments)
 	}
 
