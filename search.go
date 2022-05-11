@@ -32,7 +32,7 @@ type SearchResults struct {
 	TotalResults int
 }
 
-func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) CleanedResults {
+func getCleanedResults(tempResults *ResultsFromServer, TMFriendlyName string) CleanedResults {
 	var tmResults CleanedResults
 	var numberOfSegments = len(tempResults.ConcResult)
 
@@ -49,7 +49,7 @@ func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) Cle
 	return tmResults
 }
 
-func getSearchJSON(info SearchInfo) []byte {
+func getSearchJSON(info *SearchInfo) []byte {
 	query := searchQuery{}
 	query.SearchExpression = append(query.SearchExpression, info.Phrase)
 	query.Options.CaseSensitive = false
@@ -65,7 +65,7 @@ func getSearchJSON(info SearchInfo) []byte {
 	return queryJSON
 }
 
-func (app Application) getResultsFromTM(tmURL string, tm TM, searchJSON []byte) (retry bool, result ResultsFromServer) {
+func (app *Application) getResultsFromTM(tmURL string, tm *TM, searchJSON []byte) (retry bool, result ResultsFromServer) {
 	getTM := tmURL + tm.TMGuid
 	concordanceURL := getTM + "/concordance"
 	requestURL := concordanceURL + app.AuthString
@@ -103,7 +103,7 @@ func (app Application) getResultsFromTM(tmURL string, tm TM, searchJSON []byte) 
 	return false, tempResults
 }
 
-func (app Application) search(TMs []TM, info SearchInfo) SearchResults {
+func (app *Application) search(TMs []TM, info *SearchInfo) SearchResults {
 	var finalResults SearchResults
 	finalResults.SearchPhrase = info.Phrase
 
@@ -114,16 +114,16 @@ func (app Application) search(TMs []TM, info SearchInfo) SearchResults {
 
 	tmURL := app.BaseURL + "tms/"
 	for _, tm := range TMs {
-		retry, tempResults := app.getResultsFromTM(tmURL, tm, searchJSON)
+		retry, tempResults := app.getResultsFromTM(tmURL, &tm, searchJSON)
 		if retry {
-			_, tempResults = app.getResultsFromTM(tmURL, tm, searchJSON)
+			_, tempResults = app.getResultsFromTM(tmURL, &tm, searchJSON)
 		}
 
 		if tempResults.TotalConcResult <= 0 {
 			continue
 		}
 
-		tmResults := getCleanedResults(tempResults, tm.FriendlyName)
+		tmResults := getCleanedResults(&tempResults, tm.FriendlyName)
 		finalResults.Results = append(finalResults.Results, &tmResults)
 		finalResults.TotalResults += len(tmResults.Segments)
 	}
