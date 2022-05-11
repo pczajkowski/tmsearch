@@ -14,7 +14,7 @@ var url = flag.String("b", "", "API URL")
 var app Application
 var errorPage = template.Must(template.ParseFiles("./html/error.html"))
 
-func serveIndex(w http.ResponseWriter, r *http.Request) {
+func serveIndex(w http.ResponseWriter, _ *http.Request) {
 	t := template.Must(template.ParseFiles("./html/index.html"))
 	t.Execute(w, app.Languages)
 }
