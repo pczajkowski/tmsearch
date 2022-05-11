@@ -113,8 +113,7 @@ func (app *Application) search(tms []TM, info *SearchInfo) SearchResults {
 	}
 
 	tmURL := app.BaseURL + "tms/"
-	max := len(tms)
-	for i := 0; i < max; i++ {
+	for i, _ := range tms {
 		retry, tempResults := app.getResultsFromTM(tmURL, &tms[i], searchJSON)
 		if retry {
 			_, tempResults = app.getResultsFromTM(tmURL, &tms[i], searchJSON)
