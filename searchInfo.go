@@ -23,7 +23,7 @@ func (s *SearchInfo) ToArray() []string {
 	return []string{s.Date.Format(timeFormat), s.Host, s.Phrase, s.Language, strconv.Itoa(s.ResultsServed)}
 }
 
-func (s *SearchInfo) GetInfoFromRequest(r *http.Request) {
+func (s *SearchInfo) ParseRequest(r *http.Request) {
 	s.Date = time.Now()
 	s.Host, _, _ = net.SplitHostPort(r.RemoteAddr)
 

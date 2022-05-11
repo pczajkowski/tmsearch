@@ -21,7 +21,7 @@ func serveIndex(w http.ResponseWriter, r *http.Request) {
 
 func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
-	info.GetInfoFromRequest(r)
+	info.ParseRequest(r)
 
 	if info.Phrase == "" {
 		errorPage.Execute(w, "You need to enter search phrase!")
@@ -54,7 +54,7 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 
 func displayTMs(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
-	info.GetInfoFromRequest(r)
+	info.ParseRequest(r)
 
 	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
 		errorPage.Execute(w, "Language not valid!")
