@@ -14,14 +14,14 @@ var url = flag.String("b", "", "API URL")
 var app Application
 var errorPage = template.Must(template.ParseFiles("./html/error.html"))
 
-func serveIndex(w http.ResponseWriter, r *http.Request) {
+func serveIndex(w http.ResponseWriter, _ *http.Request) {
 	t := template.Must(template.ParseFiles("./html/index.html"))
 	t.Execute(w, app.Languages)
 }
 
 func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
-	info.GetInfoFromRequest(r)
+	info.ParseRequest(r)
 
 	if info.Phrase == "" {
 		errorPage.Execute(w, "You need to enter search phrase!")
@@ -39,7 +39,7 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	searchResults := app.search(tms, info.Phrase)
+	searchResults := app.search(tms, &info)
 	info.ResultsServed = searchResults.TotalResults
 	writeLog(info)
 
@@ -54,7 +54,7 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 
 func displayTMs(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
-	info.GetInfoFromRequest(r)
+	info.ParseRequest(r)
 
 	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
 		errorPage.Execute(w, "Language not valid!")

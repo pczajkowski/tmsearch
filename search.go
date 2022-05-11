@@ -10,7 +10,7 @@ import (
 
 // Segment stores source and translated texts.
 type Segment struct {
-	Source, Target string
+	Source, Target, DocumentName string
 }
 
 func (s *Segment) clean() {
@@ -28,41 +28,20 @@ type CleanedResults struct {
 // SearchResults stores processed results from all TMs.
 type SearchResults struct {
 	SearchPhrase string
-	Results      []CleanedResults
+	Results      []*CleanedResults
 	TotalResults int
 }
 
-// ResultsFromServer stores results as received from server.
-type ResultsFromServer struct {
-	ConcResult []struct {
-		ConcordanceTextRanges []struct {
-			Length, Start int
-		}
-		ConcordanceTranslationRanges []string
-		Length, StartPos             int
-		TMEntry                      struct {
-			SourceSegment, TargetSegment string
-		}
-	}
-	ConcTransResult, Errors []string
-	TotalConcResult         int
-}
-
-func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) CleanedResults {
+func getCleanedResults(tempResults *ResultsFromServer, TMFriendlyName string) CleanedResults {
 	var tmResults CleanedResults
-	maxReturnedBySever := 64
-
-	numberOfSegments := tempResults.TotalConcResult
-	if numberOfSegments > maxReturnedBySever {
-		numberOfSegments = maxReturnedBySever
-	}
+	var numberOfSegments = len(tempResults.ConcResult)
 
 	tmResults.Segments = make([]Segment, numberOfSegments)
 	tmResults.TMName = TMFriendlyName
 
 	for index := 0; index < numberOfSegments; index++ {
 		result := tempResults.ConcResult[index]
-		segment := Segment{result.TMEntry.SourceSegment, result.TMEntry.TargetSegment}
+		segment := Segment{result.TMEntry.SourceSegment, result.TMEntry.TargetSegment, result.TMEntry.DocumentName}
 		segment.clean()
 		tmResults.Segments[index] = segment
 	}
@@ -70,13 +49,12 @@ func getCleanedResults(tempResults ResultsFromServer, TMFriendlyName string) Cle
 	return tmResults
 }
 
-type searchQuery struct {
-	SearchExpression []string
-}
-
-func getSearchJSON(text string) []byte {
+func getSearchJSON(info *SearchInfo) []byte {
 	query := searchQuery{}
-	query.SearchExpression = append(query.SearchExpression, text)
+	query.SearchExpression = append(query.SearchExpression, info.Phrase)
+	query.Options.CaseSensitive = false
+	query.Options.ReverseLookup = info.Reverse
+	query.Options.ResultsLimit = info.SearchLimit
 
 	queryJSON, err := json.Marshal(query)
 	if err != nil {
@@ -87,7 +65,7 @@ func getSearchJSON(text string) []byte {
 	return queryJSON
 }
 
-func (app Application) getResultsFromTM(tmURL string, tm TM, searchJSON []byte) (retry bool, result ResultsFromServer) {
+func (app *Application) getResultsFromTM(tmURL string, tm *TM, searchJSON []byte) (retry bool, result ResultsFromServer) {
 	getTM := tmURL + tm.TMGuid
 	concordanceURL := getTM + "/concordance"
 	requestURL := concordanceURL + app.AuthString
@@ -125,28 +103,29 @@ func (app Application) getResultsFromTM(tmURL string, tm TM, searchJSON []byte) 
 	return false, tempResults
 }
 
-func (app Application) search(TMs []TM, text string) SearchResults {
+func (app *Application) search(tms []TM, info *SearchInfo) SearchResults {
 	var finalResults SearchResults
-	finalResults.SearchPhrase = text
+	finalResults.SearchPhrase = info.Phrase
 
-	searchJSON := getSearchJSON(text)
+	searchJSON := getSearchJSON(info)
 	if len(searchJSON) == 0 {
 		return finalResults
 	}
 
 	tmURL := app.BaseURL + "tms/"
-	for _, tm := range TMs {
-		retry, tempResults := app.getResultsFromTM(tmURL, tm, searchJSON)
+	max := len(tms)
+	for i := 0; i < max; i++ {
+		retry, tempResults := app.getResultsFromTM(tmURL, &tms[i], searchJSON)
 		if retry {
-			_, tempResults = app.getResultsFromTM(tmURL, tm, searchJSON)
+			_, tempResults = app.getResultsFromTM(tmURL, &tms[i], searchJSON)
 		}
 
 		if tempResults.TotalConcResult <= 0 {
 			continue
 		}
 
-		tmResults := getCleanedResults(tempResults, tm.FriendlyName)
-		finalResults.Results = append(finalResults.Results, tmResults)
+		tmResults := getCleanedResults(&tempResults, tms[i].FriendlyName)
+		finalResults.Results = append(finalResults.Results, &tmResults)
 		finalResults.TotalResults += len(tmResults.Segments)
 	}
 
