@@ -103,7 +103,7 @@ func (app *Application) getResultsFromTM(tmURL string, tm *TM, searchJSON []byte
 	return false, tempResults
 }
 
-func (app *Application) search(TMs []TM, info *SearchInfo) SearchResults {
+func (app *Application) search(tms []TM, info *SearchInfo) SearchResults {
 	var finalResults SearchResults
 	finalResults.SearchPhrase = info.Phrase
 
@@ -113,17 +113,18 @@ func (app *Application) search(TMs []TM, info *SearchInfo) SearchResults {
 	}
 
 	tmURL := app.BaseURL + "tms/"
-	for _, tm := range TMs {
-		retry, tempResults := app.getResultsFromTM(tmURL, &tm, searchJSON)
+	max := len(tms)
+	for i := 0; i < max; i++ {
+		retry, tempResults := app.getResultsFromTM(tmURL, &tms[i], searchJSON)
 		if retry {
-			_, tempResults = app.getResultsFromTM(tmURL, &tm, searchJSON)
+			_, tempResults = app.getResultsFromTM(tmURL, &tms[i], searchJSON)
 		}
 
 		if tempResults.TotalConcResult <= 0 {
 			continue
 		}
 
-		tmResults := getCleanedResults(&tempResults, tm.FriendlyName)
+		tmResults := getCleanedResults(&tempResults, tms[i].FriendlyName)
 		finalResults.Results = append(finalResults.Results, &tmResults)
 		finalResults.TotalResults += len(tmResults.Segments)
 	}
