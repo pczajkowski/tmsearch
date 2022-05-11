@@ -59,7 +59,7 @@ func TestSearch(t *testing.T) {
 	}
 
 	info := SearchInfo{Phrase: "something"}
-	searchResults := app.search(tms, &info)
+	searchResults := app.search(&tms, &info)
 	if searchResults.TotalResults != 4 {
 		t.Fatalf("Not all results returned! (%d)", searchResults.TotalResults)
 	}
@@ -95,7 +95,7 @@ func TestSearchWrongStatus(t *testing.T) {
 	}
 
 	info := SearchInfo{Phrase: "something"}
-	searchResults := app.search(tms, &info)
+	searchResults := app.search(&tms, &info)
 	if searchResults.TotalResults != 0 {
 		t.Fatal("There should be no results!")
 	}

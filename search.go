@@ -103,7 +103,7 @@ func (app *Application) getResultsFromTM(tmURL string, tm *TM, searchJSON []byte
 	return false, tempResults
 }
 
-func (app *Application) search(TMs []TM, info *SearchInfo) SearchResults {
+func (app *Application) search(tms *[]TM, info *SearchInfo) SearchResults {
 	var finalResults SearchResults
 	finalResults.SearchPhrase = info.Phrase
 
@@ -113,7 +113,7 @@ func (app *Application) search(TMs []TM, info *SearchInfo) SearchResults {
 	}
 
 	tmURL := app.BaseURL + "tms/"
-	for _, tm := range TMs {
+	for _, tm := range *tms {
 		retry, tempResults := app.getResultsFromTM(tmURL, &tm, searchJSON)
 		if retry {
 			_, tempResults = app.getResultsFromTM(tmURL, &tm, searchJSON)
