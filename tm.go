@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -12,8 +13,8 @@ type TM struct {
 	Client, Domain, FriendlyName, Project, SourceLangCode, Subject, TMGuid, TMOwner, TargetLangCode string
 }
 
-func getQuery(url string) *http.Response {
-	resp, err := http.Get(url)
+func getQuery(destination string) *http.Response {
+	resp, err := http.Get(destination)
 	if err != nil {
 		log.Printf("Error getting query: %s", err)
 	}
@@ -22,13 +23,16 @@ func getQuery(url string) *http.Response {
 }
 
 func (app *Application) getTMs(language string) []TM {
-	tmURL := app.BaseURL + "tms/"
-	queryURL := tmURL + app.AuthString
-	if language != "" {
-		queryURL += "&targetLang=" + language
-	}
+	tmURL := app.BaseURL + "tms?"
 
-	resp := getQuery(queryURL)
+	params := url.Values{}
+	params.Add("authToken", app.AccessToken)
+	params.Add("targetLang", language)
+
+	tmURL += params.Encode()
+	log.Println(tmURL)
+
+	resp := getQuery(tmURL)
 	defer resp.Body.Close()
 
 	var results []TM

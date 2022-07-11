@@ -19,11 +19,11 @@ type Application struct {
 	Delay                                       time.Duration
 }
 
-func (app *Application) setBaseURL(url string) {
-	if !strings.HasSuffix(url, "/") {
-		url += "/"
+func (app *Application) setBaseURL(baseURL string) {
+	if !strings.HasSuffix(baseURL, "/") {
+		baseURL += "/"
 	}
-	app.BaseURL = url
+	app.BaseURL = baseURL
 }
 
 func jsonDecoder(data io.ReadCloser, target interface{}) error {

@@ -10,7 +10,7 @@ import (
 
 var host = flag.String("h", "localhost", "host")
 var port = flag.String("p", "80", "port")
-var url = flag.String("b", "", "API URL")
+var baseURL = flag.String("b", "", "API URL")
 var app Application
 var errorPage = template.Must(template.ParseFiles("./html/error.html"))
 
@@ -76,11 +76,11 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	flag.Parse()
-	if *url == "" {
+	if *baseURL == "" {
 		log.Fatalln("Can't do anything without URL to API")
 	}
 
-	app.setBaseURL(*url)
+	app.setBaseURL(*baseURL)
 
 	status, err := app.login()
 	if !status || err != nil {
