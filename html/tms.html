@@ -17,6 +17,9 @@
                     <th>Name</th>
                     <th>Source language</th>
                     <th>Target language</th>
+                    <th>Domain</th>
+                    <th>Subject</th>
+                    <th>Owner</th>
                     <th>No. of segments</th>
                 </tr>
                 {{range .}}
@@ -24,6 +27,9 @@
                         <td><b>{{.FriendlyName}}</b></td>
                         <td>{{.SourceLangCode}}</td>
                         <td>{{.TargetLangCode}}</td>
+                        <td>{{.Domain}}</td>
+                        <td>{{.Subject}}</td>
+                        <td>{{.TMOwner}}</td>
                         <td>{{.NumEntries}}</td>
                     </tr>
                 {{end}}
