@@ -30,7 +30,6 @@ func (app *Application) getTMs(language string) []TM {
 	params.Add("targetLang", language)
 
 	tmURL += params.Encode()
-	log.Println(tmURL)
 
 	resp := getQuery(tmURL)
 	defer resp.Body.Close()
