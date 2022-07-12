@@ -83,17 +83,17 @@ func displayTBs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	TMList := app.getTBs(info.LanguageCode)
-	info.ResultsServed = len(TMList)
+	TBList := app.getTBs(info.LanguageCode)
+	info.ResultsServed = len(TBList)
 	writeLog(info)
 
 	if info.ResultsServed == 0 {
-		errorPage.Execute(w, "No TMs to display!")
+		errorPage.Execute(w, "No TBs to display!")
 		return
 	}
 
 	t := template.Must(template.New("tbs.html").ParseFiles("./html/tbs.html"))
-	t.Execute(w, TMList)
+	t.Execute(w, TBList)
 }
 
 func main() {
