@@ -1,0 +1,26 @@
+[
+    {
+        "AccessLevel": 1,
+        "Client": "",
+        "Domain": "",
+        "FriendlyName": "Test TB 1",
+        "NumEntries": 1000,
+        "Project": "",
+        "Languages": ["ger-DE", "fre-FR"],
+        "Subject": "",
+        "TBGuid": "bc02a127-6599-4def-a5f3-something123",
+        "TBOwner": "testUser"
+    },
+    {
+        "AccessLevel": 1,
+        "Client": "",
+        "Domain": "",
+        "FriendlyName": "Test TB 2",
+        "NumEntries": 1500,
+        "Project": "",
+        "Languages": ["fre-FR", "eng"],
+        "Subject": "",
+        "TBGuid": "a3b9c179-5bd2-43a8-a234-something456",
+        "TBOwner": "testUser"
+    }
+]
