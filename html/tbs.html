@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Our TBs</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        </style>
+        <script type="text/javascript" src="/static/processResults.js"></script>
+    </head>
+    <body onload="app.sortTable()">
+        <a href="/">Go back to start</a>
+        <br/>
+		<div>Filter:
+			<input id="filter" type="text" name="name" placeholder="type phrase<ENTER>" onchange="app.filterTable(this.value)" autocomplete="off">
+			<button class="btn" onclick="app.clearFilter()">Clear filter</button>
+			<i>Click on column to sort</i>
+		</div>
+        <h1>We have {{len .}} TBs</h1>
+            <table>
+                <thead>
+                    <tr style='text-align: left'>
+                        <th>Name</th>
+                        <th>Languages</th>
+                        <th>Client</th>
+                        <th>Domain</th>
+                        <th>Subject</th>
+                        <th>Owner</th>
+                        <th>No. of segments</th>
+                    </tr>
+                </thead>
+                <tbody id="dataRows">
+                {{range .}}
+                    <tr style='text-align: left'>
+                        <td><b>{{.FriendlyName}}</b></td>
+                        <td>{{.Languages}}</td>
+                        <td>{{.Client}}</td>
+                        <td>{{.Domain}}</td>
+                        <td>{{.Subject}}</td>
+                        <td>{{.TBOwner}}</td>
+                        <td>{{.NumEntries}}</td>
+                    </tr>
+                {{end}}
+                </tbody>
+            </table>
+            <br/>
+            <a href="/">Go back to start</a>
+    </body>
+</html>

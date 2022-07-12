@@ -74,6 +74,28 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, TMList)
 }
 
+func displayTBs(w http.ResponseWriter, r *http.Request) {
+	var info SearchInfo
+	info.ParseRequest(r)
+
+	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
+		errorPage.Execute(w, "Language not valid!")
+		return
+	}
+
+	TMList := app.getTBs(info.LanguageCode)
+	info.ResultsServed = len(TMList)
+	writeLog(info)
+
+	if info.ResultsServed == 0 {
+		errorPage.Execute(w, "No TMs to display!")
+		return
+	}
+
+	t := template.Must(template.New("tbs.html").ParseFiles("./html/tbs.html"))
+	t.Execute(w, TMList)
+}
+
 func main() {
 	flag.Parse()
 	if *baseURL == "" {
@@ -96,6 +118,7 @@ func main() {
 	http.HandleFunc("/", serveIndex)
 	http.HandleFunc("/q", displaySearchResults)
 	http.HandleFunc("/tms", displayTMs)
+	http.HandleFunc("/tbs", displayTBs)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	log.Fatal(http.ListenAndServe(hostname, nil))
 }
