@@ -10,7 +10,7 @@
         </style>
     </head>
     <body>
-        <form action="/q">
+        <form id="general" action="/q">
             <table>
                 <tr>
                     <th>Search</th>
@@ -40,7 +40,9 @@
                 </tr>
             </table>
             <br/>
-            <input type="submit" value="Search">
+            <input type="submit" value="Search">&nbsp;
+            <button type="submit" form="general" formaction="/tms" formmethod="get">List TMs</button>&nbsp;
+            <button type="submit" form="general" formaction="/tbs" formmethod="get">List TBs</button>
         </form>
     </body>
 </html>
