@@ -5,12 +5,28 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+	"strings"
 )
 
 // TM stores information about TM.
 type TM struct {
 	NumEntries, AccessLevel                                                                         int
 	Client, Domain, FriendlyName, Project, SourceLangCode, Subject, TMGuid, TMOwner, TargetLangCode string
+	LastModified string
+}
+
+func (t *TM) LastModifiedDate() *time.Time {
+	if !strings.HasSuffix(t.LastModified, "Z") {
+		t.LastModified += ".000Z"
+	}
+
+	modified, err := time.Parse(time.RFC3339, t.LastModified)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+
+	return &modified
 }
 
 func (app *Application) getTMs(language string) []TM {
