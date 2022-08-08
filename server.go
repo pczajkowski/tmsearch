@@ -77,6 +77,14 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, TMList)
 }
 
+func prepareResponseForCSV(w http.ResponseWriter) {
+	w.Header().Set("Content-Disposition", "attachment; filename=tms.csv")
+	w.Header().Set("Content-Type", "text/csv")
+	w.Header().Set("charset", "utf-8")
+
+	io.WriteString(w, "\xEF\xBB\xBF")
+}
+
 func serveTMsAsCSV(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.ParseRequest(r)
@@ -95,11 +103,7 @@ func serveTMsAsCSV(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Disposition", "attachment; filename=tms.csv")
-	w.Header().Set("Content-Type", "text/csv")
-	w.Header().Set("charset", "utf-8")
-
-	io.WriteString(w, "\xEF\xBB\xBF")
+	prepareResponseForCSV(w)
 	csvWriter := csv.NewWriter(w)
 	if err := csvWriter.Write(tmList[0].Header()); err != nil {
 		errorPage.Execute(w, fmt.Sprintf("error writing header to csv: %s", err))
@@ -112,7 +116,6 @@ func serveTMsAsCSV(w http.ResponseWriter, r *http.Request) {
 	}
 
 	csvWriter.Flush()
-
 	if err := csvWriter.Error(); err != nil {
 		errorPage.Execute(w, err.Error)
 	}
