@@ -7,14 +7,6 @@ import (
 	"time"
 )
 
-// TB stores information about TM.
-type TB struct {
-	NumEntries, AccessLevel                                                                         int
-	Client, Domain, FriendlyName, Project, Subject, TBGuid, TBOwner string
-	Languages []string
-	LastModified time.Time
-}
-
 func (app *Application) getTBs(language string) []TB {
 	tbURL := app.BaseURL + "tbs?"
 

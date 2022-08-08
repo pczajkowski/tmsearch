@@ -77,8 +77,8 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, TMList)
 }
 
-func prepareResponseForCSV(w http.ResponseWriter) {
-	w.Header().Set("Content-Disposition", "attachment; filename=tms.csv")
+func prepareResponseForCSV(w http.ResponseWriter, name string) {
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s.csv", name))
 	w.Header().Set("Content-Type", "text/csv")
 	w.Header().Set("charset", "utf-8")
 
@@ -103,7 +103,7 @@ func serveTMsAsCSV(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	prepareResponseForCSV(w)
+	prepareResponseForCSV(w, "tms")
 	csvWriter := csv.NewWriter(w)
 	if err := csvWriter.Write(tmList[0].Header()); err != nil {
 		errorPage.Execute(w, fmt.Sprintf("error writing header to csv: %s", err))
@@ -143,6 +143,42 @@ func displayTBs(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, TBList)
 }
 
+func serveTBsAsCSV(w http.ResponseWriter, r *http.Request) {
+	var info SearchInfo
+	info.ParseRequest(r)
+
+	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
+		errorPage.Execute(w, "Language not valid!")
+		return
+	}
+
+	tbList := app.getTBs(info.LanguageCode)
+	info.ResultsServed = len(tbList)
+	writeLog(info)
+
+	if info.ResultsServed == 0 {
+		errorPage.Execute(w, "No TBs to display!")
+		return
+	}
+
+	prepareResponseForCSV(w, "tbs")
+	csvWriter := csv.NewWriter(w)
+	if err := csvWriter.Write(tbList[0].Header()); err != nil {
+		errorPage.Execute(w, fmt.Sprintf("error writing header to csv: %s", err))
+	}
+
+	for _, tb := range tbList {
+		if err := csvWriter.Write(tb.ToArray()); err != nil {
+			errorPage.Execute(w, fmt.Sprintf("error writing record to csv: %s", err))
+		}
+	}
+
+	csvWriter.Flush()
+	if err := csvWriter.Error(); err != nil {
+		errorPage.Execute(w, err.Error)
+	}
+}
+
 func main() {
 	flag.Parse()
 	if *baseURL == "" {
@@ -167,6 +203,7 @@ func main() {
 	http.HandleFunc("/tms", displayTMs)
 	http.HandleFunc("/tmscsv", serveTMsAsCSV)
 	http.HandleFunc("/tbs", displayTBs)
+	http.HandleFunc("/tbscsv", serveTBsAsCSV)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	log.Fatal(http.ListenAndServe(hostname, nil))
 }
