@@ -6,6 +6,9 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"encoding/csv"
+	"fmt"
+	"io"
 )
 
 var host = flag.String("h", "localhost", "host")
@@ -74,6 +77,47 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, TMList)
 }
 
+func serveTMsAsCSV(w http.ResponseWriter, r *http.Request) {
+	var info SearchInfo
+	info.ParseRequest(r)
+
+	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
+		errorPage.Execute(w, "Language not valid!")
+		return
+	}
+
+	tmList := app.getTMs(info.LanguageCode)
+	info.ResultsServed = len(tmList)
+	writeLog(info)
+
+	if info.ResultsServed == 0 {
+		errorPage.Execute(w, "No TMs to display!")
+		return
+	}
+
+	w.Header().Set("Content-Disposition", "attachment; filename=tms.csv")
+	w.Header().Set("Content-Type", "text/csv")
+	w.Header().Set("charset", "utf-8")
+
+	io.WriteString(w, "\xEF\xBB\xBF")
+	csvWriter := csv.NewWriter(w)
+	if err := csvWriter.Write(tmList[0].Header()); err != nil {
+		errorPage.Execute(w, fmt.Sprintf("error writing header to csv: %s", err))
+	}
+
+	for _, tm := range tmList {
+		if err := csvWriter.Write(tm.ToArray()); err != nil {
+			errorPage.Execute(w, fmt.Sprintf("error writing record to csv: %s", err))
+		}
+	}
+
+	csvWriter.Flush()
+
+	if err := csvWriter.Error(); err != nil {
+		errorPage.Execute(w, err.Error)
+	}
+}
+
 func displayTBs(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.ParseRequest(r)
@@ -118,6 +162,7 @@ func main() {
 	http.HandleFunc("/", serveIndex)
 	http.HandleFunc("/q", displaySearchResults)
 	http.HandleFunc("/tms", displayTMs)
+	http.HandleFunc("/tmscsv", serveTMsAsCSV)
 	http.HandleFunc("/tbs", displayTBs)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	log.Fatal(http.ListenAndServe(hostname, nil))
