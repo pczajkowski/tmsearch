@@ -14,7 +14,7 @@ type TM struct {
 	LastModified string
 }
 
-func (t *TM) Header() []string {
+func (_ *TM) Header() []string {
 	return []string{"Name", "Source language", "Target language", "Client", "Domain", "Subject", "Owner", "LastModified", "No. of segments"}
 }
 
