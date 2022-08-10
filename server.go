@@ -109,8 +109,8 @@ func serveTMsAsCSV(w http.ResponseWriter, r *http.Request) {
 		errorPage.Execute(w, fmt.Sprintf("error writing header to csv: %s", err))
 	}
 
-	for _, tm := range tmList {
-		if err := csvWriter.Write(tm.ToArray()); err != nil {
+	for i := range tmList {
+		if err := csvWriter.Write(tmList[i].ToArray()); err != nil {
 			errorPage.Execute(w, fmt.Sprintf("error writing record to csv: %s", err))
 		}
 	}
@@ -167,8 +167,8 @@ func serveTBsAsCSV(w http.ResponseWriter, r *http.Request) {
 		errorPage.Execute(w, fmt.Sprintf("error writing header to csv: %s", err))
 	}
 
-	for _, tb := range tbList {
-		if err := csvWriter.Write(tb.ToArray()); err != nil {
+	for i := range tbList {
+		if err := csvWriter.Write(tbList[i].ToArray()); err != nil {
 			errorPage.Execute(w, fmt.Sprintf("error writing record to csv: %s", err))
 		}
 	}
