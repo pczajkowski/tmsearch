@@ -31,7 +31,7 @@ func displaySearchResults(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
+	if info.LanguageCode != "" && !app.checkLanguage(&info.LanguageCode) {
 		errorPage.Execute(w, "Language not valid!")
 		return
 	}
@@ -59,7 +59,7 @@ func displayTMs(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.ParseRequest(r)
 
-	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
+	if info.LanguageCode != "" && !app.checkLanguage(&info.LanguageCode) {
 		errorPage.Execute(w, "Language not valid!")
 		return
 	}
@@ -89,7 +89,7 @@ func serveTMsAsCSV(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.ParseRequest(r)
 
-	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
+	if info.LanguageCode != "" && !app.checkLanguage(&info.LanguageCode) {
 		errorPage.Execute(w, "Language not valid!")
 		return
 	}
@@ -125,7 +125,7 @@ func displayTBs(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.ParseRequest(r)
 
-	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
+	if info.LanguageCode != "" && !app.checkLanguage(&info.LanguageCode) {
 		errorPage.Execute(w, "Language not valid!")
 		return
 	}
@@ -147,7 +147,7 @@ func serveTBsAsCSV(w http.ResponseWriter, r *http.Request) {
 	var info SearchInfo
 	info.ParseRequest(r)
 
-	if info.LanguageCode != "" && !app.checkLanguage(info.LanguageCode) {
+	if info.LanguageCode != "" && !app.checkLanguage(&info.LanguageCode) {
 		errorPage.Execute(w, "Language not valid!")
 		return
 	}
