@@ -21,14 +21,14 @@ func (t *TB) Header() []string {
 func (t *TB) ToArray() []string {
 	var array []string
 
-	array = append(array, t.FriendlyName)
-	array = append(array, strings.Join(t.Languages, ";"))
-	array = append(array, t.Client)
-	array = append(array, t.Domain)
-	array = append(array, t.Subject)
-	array = append(array, t.TBOwner)
-	array = append(array, t.LastModified.String())
-	array = append(array, fmt.Sprintf("%d", t.NumEntries))
+	array = append(array, t.FriendlyName,
+		strings.Join(t.Languages, ";"),
+		t.Client,
+		t.Domain,
+		t.Subject,
+		t.TBOwner,
+		t.LastModified.String(),
+		fmt.Sprintf("%d", t.NumEntries))
 
 	return array
 }
