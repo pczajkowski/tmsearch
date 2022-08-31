@@ -54,7 +54,7 @@ func (app *Application) loadLanguages() bool {
 	return true
 }
 
-func (app Application) checkLanguage(language *string) bool {
+func (app *Application) checkLanguage(language *string) bool {
 	_, ok := app.Languages[*language]
 	return ok
 }

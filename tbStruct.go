@@ -14,7 +14,7 @@ type TB struct {
 	LastModified time.Time
 }
 
-func (_ *TB) Header() []string {
+func (*TB) Header() []string {
 	return []string{"Name", "Languages", "Client", "Domain", "Subject", "Owner", "LastModified", "No. of entries"}
 }
 

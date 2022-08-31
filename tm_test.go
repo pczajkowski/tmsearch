@@ -12,7 +12,8 @@ import (
 func serveTMs() *httptest.Server {
 	tms, err := ioutil.ReadFile("./testFiles/tms.json")
 	if err != nil {
-		log.Fatalf("Error reading file: %s", err)
+		log.Printf("Error reading file: %s", err)
+		return nil
 	}
 
 	f := func(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +26,9 @@ func serveTMs() *httptest.Server {
 
 func TestGetTMs(t *testing.T) {
 	server := serveTMs()
+	if server == nil {
+		return
+	}
 	defer server.Close()
 
 	var app Application
