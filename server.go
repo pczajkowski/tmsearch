@@ -204,6 +204,11 @@ func main() {
 	http.HandleFunc("/tmscsv", serveTMsAsCSV)
 	http.HandleFunc("/tbs", displayTBs)
 	http.HandleFunc("/tbscsv", serveTBsAsCSV)
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	log.Fatal(http.ListenAndServe(hostname, nil))
+	http.HandleFunc("/static/processResults.js", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "./static/processResults.js") })
+
+	server := &http.Server{
+        Addr: hostname,
+        ReadHeaderTimeout: 3 * time.Second,
+    }
+	log.Fatal(server.ListenAndServe())
 }
