@@ -7,17 +7,20 @@ import (
 	"time"
 )
 
-func (app *Application) getTMs(language string) []TM {
-	tmURL := app.BaseURL + "tms?"
+func (app *Application) getTBs(language string) []TB {
+	tbURL := app.BaseURL + "tbs?"
 
 	params := url.Values{}
 	params.Add("authToken", app.AccessToken)
-	params.Add("targetLang", language)
 
-	tmURL += params.Encode()
+	if language != "" {
+		params.Add("lang", language)
+	}
 
-	var results []TM
-	resp, err := getQuery(tmURL)
+	tbURL += params.Encode()
+
+	var results []TB
+	resp, err := getQuery(tbURL)
 	if err != nil {
 		log.Println(err)
 		return results
@@ -34,17 +37,17 @@ func (app *Application) getTMs(language string) []TM {
 			return results
 		}
 
-		return app.getTMs(language)
+		return app.getTBs(language)
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		log.Printf("Problem getting TMs (%s)!", resp.Status)
+		log.Printf("Problem getting TBs (%s)!", resp.Status)
 		return results
 	}
 
 	err = jsonDecoder(resp.Body, &results)
 	if err != nil {
-		log.Printf("Error decoding TM results: %s", err)
+		log.Printf("Error decoding TB results: %s", err)
 	}
 
 	return results

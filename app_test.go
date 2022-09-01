@@ -49,7 +49,7 @@ func TestLoadLanguages(t *testing.T) {
 		t.Fatalf("Value of key '%s' isn't '%s'", testLanguageCode, testLanguage)
 	}
 
-	if !app.checkLanguage(testLanguageCode) {
+	if !app.checkLanguage(&testLanguageCode) {
 		t.Fatalf("checkLanguage returned false for %s", testLanguageCode)
 	}
 }

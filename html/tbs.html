@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>Our TMs</title>
+        <title>Our TBs</title>
         <style>
             table, th, td {
                 border: 1px solid black;
@@ -18,33 +18,31 @@
 			<button class="btn" onclick="app.clearFilter()">Clear filter</button>
 			<i>Click on column to sort</i>
 		</div>
-        <h1>We have {{len .}} TMs</h1>
+        <h1>We have {{len .}} TBs</h1>
             <table>
                 <thead>
                     <tr style='text-align: left'>
                         <th>Name</th>
-                        <th>Source language</th>
-                        <th>Target language</th>
+                        <th>Languages</th>
                         <th>Client</th>
                         <th>Domain</th>
                         <th>Subject</th>
                         <th>Owner</th>
                         <th>LastModified</th>
-                        <th>No. of segments</th>
+                        <th title="Total number of entries in TB for all languages">No. of entries</th>
                     </tr>
                 </thead>
                 <tbody id="dataRows">
                 {{range .}}
                     <tr style='text-align: left'>
                         <td><b>{{.FriendlyName}}</b></td>
-                        <td>{{.SourceLangCode}}</td>
-                        <td>{{.TargetLangCode}}</td>
+                        <td>{{.Languages}}</td>
                         <td>{{.Client}}</td>
                         <td>{{.Domain}}</td>
                         <td>{{.Subject}}</td>
-                        <td>{{.TMOwner}}</td>
-                        <td>{{.LastModifiedDate}}</td>
-                        <td>{{.NumEntries}}</td>
+                        <td>{{.TBOwner}}</td>
+                        <td>{{.LastModified}}</td>
+                        <td title="Total number of entries in TB for all languages">{{.NumEntries}}</td>
                     </tr>
                 {{end}}
                 </tbody>

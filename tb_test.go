@@ -9,8 +9,8 @@ import (
 	"testing"
 )
 
-func serveTMs() *httptest.Server {
-	tms, err := ioutil.ReadFile("./testFiles/tms.json")
+func serveTBs() *httptest.Server {
+	tbs, err := ioutil.ReadFile("./testFiles/tbs.json")
 	if err != nil {
 		log.Printf("Error reading file: %s", err)
 		return nil
@@ -18,14 +18,14 @@ func serveTMs() *httptest.Server {
 
 	f := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprintln(w, string(tms))
+		fmt.Fprintln(w, string(tbs))
 	}
 
 	return httptest.NewServer(http.HandlerFunc(f))
 }
 
-func TestGetTMs(t *testing.T) {
-	server := serveTMs()
+func TestGetTBs(t *testing.T) {
+	server := serveTBs()
 	if server == nil {
 		return
 	}
@@ -34,25 +34,25 @@ func TestGetTMs(t *testing.T) {
 	var app Application
 	app.setBaseURL(server.URL)
 
-	tms := app.getTMs("")
-	if len(tms) != 2 {
-		t.Fatalf("Not all TMs read! (%d)", len(tms))
+	tbs := app.getTBs("")
+	if len(tbs) != 2 {
+		t.Fatalf("Not all TBs read! (%d)", len(tbs))
 	}
 
-	if tms[0].FriendlyName != "Test TM 1" || tms[1].FriendlyName != "Test TM 2" {
-		t.Fatalf("Something went wrong while reading TMs!\n%v", tms)
+	if tbs[0].FriendlyName != "Test TB 1" || tbs[1].FriendlyName != "Test TB 2" {
+		t.Fatalf("Something went wrong while reading TBs!\n%v", tbs)
 	}
 }
 
-func TestGetTMsWrongStatus(t *testing.T) {
+func TestGetTVsWrongStatus(t *testing.T) {
 	server := fakeServer(http.StatusBadRequest, "")
 	defer server.Close()
 
 	var app Application
 	app.setBaseURL(server.URL)
 
-	tms := app.getTMs("")
-	if len(tms) != 0 {
-		t.Fatal("There should be no TMs!")
+	tbs := app.getTBs("")
+	if len(tbs) != 0 {
+		t.Fatal("There should be no TBs!")
 	}
 }
